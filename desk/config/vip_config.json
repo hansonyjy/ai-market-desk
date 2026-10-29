@@ -1,0 +1,107 @@
+{
+  "subject": {
+    "TSLA": [
+      "Tesla",
+      "TSLA",
+      "Cybertruck",
+      "Cybercab",
+      "robotaxi",
+      "Optimus",
+      "FSD",
+      "Megapack",
+      "Model Y",
+      "Model 3",
+      "Gigafactory"
+    ],
+    "SPCX": [
+      "SpaceX",
+      "SPCX",
+      "Starlink",
+      "Starship",
+      "Falcon",
+      "Starbase",
+      "Dragon",
+      "Shotwell"
+    ]
+  },
+  "opinion_sources": [
+    "fool.com",
+    "seekingalpha.com/article",
+    "seekingalpha.com/news/ai-tech",
+    "investorplace.com",
+    "zacks.com/commentary"
+  ],
+  "material_all": [
+    "merger",
+    "merge",
+    "acquisition",
+    "acquire",
+    "takeover",
+    "special committee",
+    "earnings",
+    "results",
+    "quarter",
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "revenue",
+    "guidance",
+    "outlook",
+    "CEO",
+    "CFO",
+    "board",
+    "SEC",
+    "lawsuit",
+    "probe",
+    "investigation",
+    "downgrade",
+    "upgrade",
+    "price target",
+    "fair value",
+    "buyback",
+    "offering",
+    "stock split",
+    "stake",
+    "spin-off",
+    "spinoff"
+  ],
+  "keywords": {
+    "SPCX": [
+      "Starship",
+      "Starlink",
+      "Falcon",
+      "launch",
+      "FAA",
+      "NASA",
+      "contract",
+      "xAI",
+      "SpaceXAI",
+      "IPO lockup",
+      "index"
+    ],
+    "TSLA": [
+      "deliveries",
+      "production",
+      "recall",
+      "NHTSA",
+      "robotaxi",
+      "FSD",
+      "Optimus",
+      "margin",
+      "price cut",
+      "Musk sale",
+      "guidance"
+    ]
+  },
+  "x_accounts": {
+    "SPCX": [
+      "SpaceX",
+      "elonmusk"
+    ],
+    "TSLA": [
+      "Tesla",
+      "elonmusk"
+    ]
+  }
+}

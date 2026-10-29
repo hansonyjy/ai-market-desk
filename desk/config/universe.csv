@@ -1,0 +1,101 @@
+Ticker,Name,Status,Priority,Target entry level,Trim level,Theme
+NVDA,Nvidia,Holding,Normal,,,Semis / AI
+AAPL,Apple,Holding,Normal,,,Mag7
+MSFT,Microsoft,Holding,Normal,,,Mag7 / AI
+GOOGL,Alphabet,Holding,Normal,,,Mag7 / AI
+MU,Micron Technology,Holding,Normal,,,Memory / semis
+AMZN,Amazon,Holding,Normal,,,Mag7 / cloud
+AMD,Advanced Micro Devices,Holding,Normal,,,Semis / AI
+TSLA,Tesla,Holding,VIP,,,EV / Mag7
+META,Meta Platforms,Holding,Normal,,,Mag7 / AI
+SPCX,SpaceX,Holding,VIP,,,Space / satellites
+WMT,Walmart,Holding,Normal,,,Consumer staples
+AVGO,Broadcom,Holding,Normal,,,Semis / AI
+INTC,Intel,Holding,Normal,,,Semis
+PLTR,Palantir Technologies,Holding,Normal,,,Software / AI
+COST,Costco,Holding,Normal,,,Consumer staples
+CSCO,Cisco,Holding,Normal,,,Networking
+PANW,Palo Alto Networks,Holding,Normal,,,Cybersecurity
+AMAT,Applied Materials,Holding,Normal,,,Semi equipment
+LRCX,Lam Research,Holding,Normal,,,Semi equipment
+TXN,Texas Instruments,Holding,Normal,,,Semis
+CRWD,CrowdStrike,Holding,Normal,,,Cybersecurity
+NFLX,Netflix,Holding,Normal,,,Media / streaming
+AMGN,Amgen,Holding,Normal,,,Biotech
+LIN,Linde,Holding,Normal,,,Materials
+MRVL,Marvell Technology,Holding,Normal,,,Semis / AI infra
+SHOP,Shopify,Holding,Normal,,,E-commerce / software
+ADI,Analog Devices,Holding,Normal,,,Semis
+GILD,Gilead Sciences,Holding,Normal,,,Biotech
+KLAC,KLA Corporation,Holding,Normal,,,Semi equipment
+QCOM,Qualcomm,Holding,Normal,,,Semis
+PEP,PepsiCo,Holding,Normal,,,Consumer staples
+SNDK,Sandisk,Holding,Normal,,,Memory / storage
+ISRG,Intuitive Surgical,Holding,Normal,,,Medtech
+TMUS,T-Mobile US,Holding,Normal,,,Telecom
+ASML,ASML Holding,Holding,Normal,,,Semi equipment
+STX,Seagate Technology,Holding,Normal,,,Memory / storage
+FTNT,Fortinet,Holding,Normal,,,Cybersecurity
+VRTX,Vertex Pharmaceuticals,Holding,Normal,,,Biotech
+WDC,Western Digital,Holding,Normal,,,Memory / storage
+ADP,Automatic Data Processing,Holding,Normal,,,Business services
+SBUX,Starbucks,Holding,Normal,,,Consumer discretionary
+BKNG,Booking Holdings,Holding,Normal,,,Travel
+ADBE,Adobe,Holding,Normal,,,Software
+MAR,Marriott International,Holding,Normal,,,Travel
+ARM,Arm Holdings,Holding,Normal,,,Semis / AI
+CSX,CSX Corporation,Holding,Normal,,,Rails / transport
+DDOG,Datadog,Holding,Normal,,,Software / cloud
+INTU,Intuit,Holding,Normal,,,Software
+MNST,Monster Beverage,Holding,Normal,,,Consumer staples
+CDNS,Cadence Design Systems,Holding,Normal,,,Semi software
+CTAS,Cintas,Holding,Normal,,,Business services
+CEG,Constellation Energy,Holding,Normal,,,Power / nuclear
+SNPS,Synopsys,Holding,Normal,,,Semi software
+MELI,Mercado Libre,Holding,Normal,,,E-commerce
+REGN,Regeneron Pharmaceuticals,Holding,Normal,,,Biotech
+APP,AppLovin,Holding,Normal,,,Software / ads
+MRNA,Moderna,Holding,Normal,,,Biotech
+MDLZ,Mondelez International,Holding,Normal,,,Consumer staples
+CMCSA,Comcast,Holding,Normal,,,Media / telecom
+ROST,Ross Stores,Holding,Normal,,,Retail
+LITE,Lumentum,Holding,Normal,,,Optical / semis
+ORLY,O'Reilly Automotive,Holding,Normal,,,Retail
+ABNB,Airbnb,Holding,Normal,,,Travel
+AEP,American Electric Power,Holding,Normal,,,Utilities
+DASH,DoorDash,Holding,Normal,,,Consumer internet
+HON,Honeywell Technologies,Holding,Normal,,,Industrials
+NXPI,NXP Semiconductors,Holding,Normal,,,Semis
+FAST,Fastenal,Holding,Normal,,,Industrials
+FANG,Diamondback Energy,Holding,Normal,,,Energy
+MPWR,Monolithic Power Systems,Holding,Normal,,,Semis
+BKR,Baker Hughes,Holding,Normal,,,Energy
+PCAR,Paccar,Holding,Normal,,,Industrials
+ADSK,Autodesk,Holding,Normal,,,Software
+HONA,Honeywell Aerospace,Holding,Normal,,,Aerospace
+PDD,PDD Holdings,Holding,Normal,,,E-commerce
+MSTR,MicroStrategy,Holding,Normal,,,Crypto
+CCEP,Coca-Cola Europacific Partners,Holding,Normal,,,Consumer staples
+KDP,Keurig Dr Pepper,Holding,Normal,,,Consumer staples
+TER,Teradyne,Holding,Normal,,,Semi equipment
+XEL,Xcel Energy,Holding,Normal,,,Utilities
+ALAB,Astera Labs,Holding,Normal,,,Semis / AI infra
+EXC,Exelon,Holding,Normal,,,Utilities
+PYPL,PayPal,Holding,Normal,,,Payments
+TRI,Thomson Reuters,Holding,Normal,,,Business services
+IDXX,Idexx Laboratories,Holding,Normal,,,Medtech
+ROP,Roper Technologies,Holding,Normal,,,Software
+MCHP,Microchip Technology,Holding,Normal,,,Semis
+PAYX,Paychex,Holding,Normal,,,Business services
+WDAY,Workday,Holding,Normal,,,Software
+TTWO,Take-Two Interactive,Holding,Normal,,,Gaming
+FER,Ferrovial,Holding,Normal,,,Infrastructure
+NBIS,Nebius Group,Holding,Normal,,,AI / cloud
+ODFL,Old Dominion,Holding,Normal,,,Rails / transport
+AXON,Axon Enterprise,Holding,Normal,,,Industrials
+GEHC,GE HealthCare,Holding,Normal,,,Medtech
+RKLB,Rocket Lab,Holding,Normal,,,Space / satellites
+ALNY,Alnylam Pharmaceuticals,Holding,Normal,,,Biotech
+DXCM,Dexcom,Holding,Normal,,,Medtech
+CPRT,Copart,Holding,Normal,,,Business services
+CRWV,CoreWeave,Holding,Normal,,,AI / cloud
