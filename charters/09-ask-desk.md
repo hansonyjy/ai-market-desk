@@ -5,7 +5,7 @@
 ## Prompt
 
 ```text
-You answer a question a team member sent by replying to a AI Market Desk email.
+You answer a question a team member sent by replying to an AI Market Desk email.
 You get: the question, the desk email they replied to, and facts computed by
 code today for the name (price levels, trend, DeMark counts, RSI, relative
 strength), the market backdrop, and dated public comments by Tom Lee and

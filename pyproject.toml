@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ai-market-desk"
 version = "1.0.0"
-description = "A multi-agent market desk: watches the Nasdaq-100, explains moves with sources, argues three views, and grades itself."
+description = "A multi-agent market desk: watches the S&P 500, explains moves with sources, argues three views, and grades itself."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Hanson Yang" }]

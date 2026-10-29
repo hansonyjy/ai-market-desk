@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/runs%20for-~%241%2Fday-5eead4" alt="about $1 a day">
 </p>
 
-**AI Market Desk** watches the Nasdaq-100 every 15 minutes. When a stock moves for a reason, it emails you: what happened, why (with sources), where the levels are, how two very different strategists would read it, and a plain call: *watch, don't chase, consider adding, consider trimming*. Then it grades every one of those calls against the market.
+**AI Market Desk** watches the S&P 500 every 15 minutes. When a stock moves for a reason, it emails you: what happened, why (with sources), where the levels are, how two very different strategists would read it, and a plain call: *watch, don't chase, consider adding, consider trimming*. Then it grades every one of those calls against the market.
 
 I designed and built it end to end: the rules engine, six AI agents, the email layer, a backtesting lab, a scorecard and a daily self-check. I build with Claude Code as a pair programmer, and the history shows how: small changes, each with its reason and its tests.
 
@@ -16,7 +16,8 @@ I designed and built it end to end: the rules engine, six AI agents, the email l
 
 ## What it does, in 30 seconds
 
-- **Free until something happens.** Plain rules scan 100 names every 15 minutes (gaps, breakouts, volume spikes, fast moves, 200-day pullbacks). No AI runs until a rule fires.
+- **Free until something happens.** Plain rules scan all 500 names every 15 minutes (gaps, breakouts, volume spikes, fast moves, 200-day pullbacks). No AI runs until a rule fires.
+- **Only the strongest hits get read.** On 500 names a busy open can fire dozens of rules. Each scan ranks its hits by volume, size of move and setup, and only the top 8 go to the agents. The rest still go in the Signal Log, tagged `triage_cut`.
 - **Explains the move, or says it can't.** A *Tape Reader* agent finds the catalyst in today's news, with links. No source, no claim.
 - **Two lenses that are allowed to disagree.** A *Chartist* (levels, trend, DeMark exhaustion, leadership) and a *Strategist* (liquidity, sentiment, breadth) each vote *add / trim / watch*. A fixed rule set, not a model, makes the final Call.
 - **You can talk back.** Reply to any alert with a question and the right specialist answers in the same thread.
@@ -66,14 +67,16 @@ Every catalyst needs a link dated today or the last session. Quote pages, homepa
 The Chartist and the Strategist argue. The Call comes from fixed rules, so the same facts always give the same call. It never trims on price alone.
 
 **4. Every rule earns its place.**
-The **Rule Lab** replays each price rule over five years against condition-matched random days, clusters errors by month, holds out the latest years, and runs a placebo on random dates. <!-- RULELAB: chart + one-line result on the Nasdaq-100 --> The finding shaped the product: price rules time nothing on their own, so the value has to come from the news read, and the Scorecard measures exactly that.
+The **Rule Lab** replays each price rule over five years against condition-matched random days, clusters errors by month, holds out the latest years, and runs a placebo on random dates. <!-- RULELAB: chart + one-line result on the S&P 500 --> The finding shaped the product: price rules time nothing on their own, so the value has to come from the news read, and the Scorecard measures exactly that.
 
 **5. Every bug becomes a check.**
 `audit.py` runs after the close and emails one line: *all clear* or *N fail, M warn*. Each check is a problem the desk actually had: a repeated VIP story, an alert with no source, a cap exhausted before noon, a security renamed in the Universe.
 
 ## Engineering notes
 
-- **Cost control.** Rules are free. AI runs only on hits, in small batches, under a hard daily call cap, and each run logs its cost per agent. A full live day costs about $1.
+- **Cost control.** Rules are free. AI runs only on the top-ranked hits, in small batches, under a hard daily call cap, and each run logs its cost per agent. Watching 500 names costs about the same as 100: about $1 a day.
+- **Triage under a budget.** Hits are scored in plain arithmetic (volume, move, LONG setup, new story) and read strongest first, so if the budget runs out it is the weakest names that go unread. The run log shows every score and every cut.
+- **Built for 500 names.** Earnings dates come from one calendar call per week instead of one call per name (500 calls at the free tier's 60 a minute would take over 9 minutes). The universe is rebuilt from the public index list by `scripts/build_universe.py`, with GICS sectors mapped to sector ETFs.
 - **Budgets you can see.** Per-day caps on short-term, long-term and VIP emails; VIP news is uncapped for three trading days after that name reports.
 - **Time limits.** The Chartist runs at low reasoning effort with a token budget that scales with the batch, plus one retry. A 9-alert batch once spent 3.7 minutes thinking and hit the job's time limit.
 - **Data hygiene.** Stale bars are dropped against the exchange calendar; 200-day signals are switched off for 200 trading days after a spin-off, when the history describes a different company.
@@ -96,7 +99,8 @@ Set Gmail settings in `.env` to send real email, or `SHEET_ID` to use a Google S
 ```
 desk/            the package: scanner, agents (ai.py), levels, macro, mailer, inbox, audit, rulelab, replay, cli
 charters/        one prompt file per agent
-desk/config/     universe (Nasdaq-100), sector benchmarks, VIP keywords, source rules
+desk/config/     universe (S&P 500), sector benchmarks, VIP keywords, source rules
+scripts/         rebuild the universe when the index changes
 tests/           500 offline checks, including an end-to-end record/replay test
 demo/fixtures/   the recorded session that `desk demo` replays
 ```
