@@ -8,9 +8,9 @@
   <img src="https://img.shields.io/badge/runs%20for-~%241%2Fday-5eead4" alt="about $1 a day">
 </p>
 
-**AI Market Desk** watches the Nasdaq-100 every 15 minutes. When a stock moves for a reason, it emails the team: what happened, why (with sources), where the levels are, how two very different strategists would read it, and a plain call: *watch, don't chase, consider adding, consider trimming*. Then it grades every one of those calls against the market.
+**AI Market Desk** watches the Nasdaq-100 every 15 minutes. When a stock moves for a reason, it emails you: what happened, why (with sources), where the levels are, how two very different strategists would read it, and a plain call: *watch, don't chase, consider adding, consider trimming*. Then it grades every one of those calls against the market.
 
-I built it end to end and ran it every trading day for a live investment team: the rules engine, six AI agents, the email layer, a backtesting lab, a scorecard and a self-check. This repository is a clean, public version on the Nasdaq-100.
+I designed and built it end to end: the rules engine, six AI agents, the email layer, a backtesting lab, a scorecard and a daily self-check. I build with Claude Code as a pair programmer, and the history shows how: small changes, each with its reason and its tests.
 
 <!-- HERO: screenshot of a real alert email (docs/img/alert.png) -->
 
