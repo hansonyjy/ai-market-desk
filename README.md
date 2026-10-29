@@ -14,7 +14,8 @@ Every 15 minutes it scans the S&P 500, or your own portfolio and watchlist, and 
 
 I designed and built it end to end, as a product and as a system: what an investor needs to see in a 30-second email, the rules engine and six AI agents behind it, and the scorecard that keeps it honest. I build with Claude Code as a pair programmer, and the history shows how: small changes, each with its reason and its tests.
 
-<!-- HERO: screenshot of a real alert email (docs/img/alert.png) -->
+<p align="center"><img src="docs/img/desk.gif" alt="One real alert, start to finish: the scanner flags AMZN, the Tape Reader finds why, two lenses disagree, the Call says watch, do not chase, the email lands, and five days later the Scorecard grades it" width="100%"></p>
+<p align="center"><sub>A real alert from Oct 19, 2026, text shortened to fit. Rebuilt from <a href="docs/anim/desk.html"><code>docs/anim/desk.html</code></a> by <code>node docs/anim/render.js</code>.</sub></p>
 
 ## What lands in your inbox
 

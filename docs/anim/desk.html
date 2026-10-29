@@ -45,26 +45,28 @@
 // ------------------------------------------------------------------ content
 // Sample text until the recorded session's real alert is filled in (then draft: false).
 const CONTENT = {
-  draft: true,                       // shows a "DRAFT · SAMPLE DATA" tag until real data is in
-  ticker: "NVDA", move: "+6.0%",
-  rule: "Gapped up and broke its 20-day high, on 20.9x normal volume",
-  headline: "Nvidia climbs as a hyperscaler raises its AI capex plan",
-  source: "reuters.com", read: "Buying · high confidence",
-  chartist: ["Support $72.17", "Resistance $78.40", "Trend up, RSI 64"], chartistVote: "ADD",
-  strategist: "Fits the tape, but breadth is narrow: a few leaders carry the index.", strategistVote: "WATCH",
-  call: "Watch, don't chase",
-  subject: "NVDA up 6.0%: opened 5.0% above yesterday's close",
-  preview: "Why: Nvidia climbs as a hyperscaler raises its AI capex plan. Call: Watch, don't chase.",
-  older: [["AI Market Desk", "Opening digest · 6 names", "10:06"], ["AI Market Desk", "AVGO down 3.1%: fell below its 20-day low", "Yesterday"]],
+  // A real alert, sent Mon Oct 19 2026 at 10:16 ET by the same code (text shortened to fit the cards).
+  draft: false, when: "REAL ALERT · OCT 19, 2026",
+  ticker: "AMZN", move: "+3.6%",
+  headline: "No AMZN-specific news: shares rose with the market's recovery and AI-spending optimism ahead of earnings.",
+  source: "gurufocus.com +1", read: "Buying · market-wide · medium",
+  chartist: ["Support $257.08", "Resistance $263.70", "Uptrend, no exhaustion yet"], chartistVote: "WATCH",
+  strategist: "AI-spending confidence ahead of earnings; the move fits a dip-buy tape.", strategistVote: "ADD",
+  call: "Watch, do not chase",
+  subject: "AMZN up 3.6%: about 1.5x its normal daily range",
+  preview: "Why: no AMZN-specific news; the market rose. Call: Watch, do not chase.",
+  older: [["AI Market Desk", "Opening digest", "07:06"], ["AI Market Desk", "Health check: all clear", "Fri"]],
+  grade: { d5: "5 days: −3.9%", d20: "20 days: pending",
+           note: "Five days later AMZN was down 3.9%. Chasing would have lost; the Strategist's Add is scored a miss." },
   grid: "AAPL MSFT NVDA AMZN META GOOGL AVGO TSLA BRK-B UNH HD PG WMT COST NFLX ABBV BAC KO ORCL CVX MRK AMD PEP TMO ADBE LIN CSCO MCD ACN ABT WFC DIS INTU CAT GE IBM QCOM TXN VZ AMGN PFE UBER ISRG GS SPGI BKNG LOW HON PLTR MU ANET DE SBUX ADP PANW".split(" "),
 };
 const CAPTIONS = [   // [start second, text]
   [0.0, "Plain rules scan all 500 names every 15 minutes. No AI, no cost."],
   [1.6, "A rule fires. The Tape Reader finds out why, with a source."],
-  [3.6, "Two lenses vote, and they are allowed to disagree."],
-  [5.4, "Fixed rules make the Call, not a model's mood."],
+  [3.6, "Two lenses vote, and here they disagree: Watch vs Add."],
+  [5.4, "Fixed rules make the Call. No company news, so don't chase."],
   [6.6, "It lands in your inbox, in plain words."],
-  [7.9, "Then the desk grades its own call against the market."],
+  [7.9, "Five days later, the desk grades it: AMZN down 3.9%."],
 ];
 const DURATION = 10.0;
 
@@ -88,7 +90,7 @@ const C = {  // card boxes: x, y, w, h
 document.body.innerHTML = `
   <div class="abs" style="left:28px;top:22px;font-size:21px;font-weight:800;letter-spacing:-.3px">AI Market Desk
     <span style="font-weight:500;color:var(--muted);font-size:15px;margin-left:10px">how one move becomes a decision</span></div>
-  <div id="tag" class="abs">DRAFT · SAMPLE DATA</div>
+  <div id="tag" class="abs"></div>
   <svg id="wires" class="abs" style="left:0;top:0" width="1200" height="640"></svg>
   <div id="scan" class="card">${hd("scan", "Scanner", "S&amp;P 500 · rules only · $0")}<div class="grid" id="grid"></div></div>
   <div id="tape" class="card">${hd("news", "Tape Reader", "why is it moving, right now?")}
@@ -107,14 +109,16 @@ document.body.innerHTML = `
   <div id="inbox" class="card">${hd("mail", "Your inbox", "plain words, with sources")}<div id="mails"></div></div>
   <div id="grade" class="card" style="left:24px;top:494px;width:1152px;height:54px;padding:0 18px;display:flex;align-items:center;gap:18px">
     <div class="ttl" style="font-size:14.5px;white-space:nowrap">Scorecard</div>
-    <div class="sub" style="font-size:12.5px;white-space:nowrap">every call is graded against the market</div>
+    <div class="sub" id="gradeSub" style="font-size:12.5px;width:500px;line-height:1.3">every call is graded against the market</div>
     <div id="track" style="flex:1;position:relative;height:30px"></div></div>
   <div id="ticket" class="abs">${CONTENT.ticker} ${CONTENT.move}</div>
   <div id="caption" class="abs"></div>
   <div class="abs" style="left:0;top:628px;width:1200px;height:3px;background:#1c2b4a"><div id="bar" style="height:3px;background:var(--indigo)"></div></div>`;
 
 for (const [id, [x, y, w, h]] of Object.entries(C)) Object.assign(document.getElementById(id).style, {left:x+"px", top:y+"px", width:w+"px", height:h+"px"});
-document.getElementById("tag").style.display = CONTENT.draft ? "" : "none";
+const tagEl = document.getElementById("tag");
+tagEl.textContent = CONTENT.draft ? "DRAFT · SAMPLE DATA" : CONTENT.when;
+if (!CONTENT.draft) Object.assign(tagEl.style, { color: "#5eead4", borderColor: "#14b8a6" });
 const grid = document.getElementById("grid");
 CONTENT.grid.slice(0, 55).forEach(t => { const d = document.createElement("div"); d.className = "cell"; d.textContent = t; grid.appendChild(d); });
 const cells = [...grid.children];
@@ -128,12 +132,12 @@ document.getElementById("mails").innerHTML =
 
 // scorecard track: today, +5 days, +20 days
 const track = document.getElementById("track");
-const marks = [["today", 0], ["5 days", .45], ["20 days", 1]];
+const marks = [["alert", 0], ["5 days", .4], [CONTENT.grade.d20, 1]];
 track.innerHTML = `<div style="position:absolute;left:0;right:0;top:14px;height:2px;background:#2a3b5c"></div>
   <div id="trackFill" style="position:absolute;left:0;top:14px;height:2px;background:var(--teal)"></div>` +
   marks.map(([l, p], i) => `<div style="position:absolute;left:calc(${p*100}% - 11px);top:4px;text-align:center;z-index:2">
      <div class="dot" id="dot${i}" style="width:22px;height:22px;border-radius:50%;background:#1c2b4a;border:2px solid #2a3b5c;display:grid;place-items:center"></div></div>
-     <div style="position:absolute;left:calc(${p*100}% + ${i === 2 ? -74 : 16}px);top:6px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);padding:0 6px">${l}</div>`).join("");
+     <div id="ml${i}" style="position:absolute;left:calc(${p*100}% + ${i === 2 ? -128 : 16}px);top:6px;white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);padding:0 6px">${l}</div>`).join("");
 
 // wires between cards
 const W = [ // id, from [x,y], to [x,y], lights at second
@@ -221,8 +225,9 @@ window.render = function (t) {
   document.getElementById("stratTxt").textContent = CONTENT.strategist.slice(0, sn);
   const vote = (id, at, bg, fg) => { const el = document.getElementById(id), p = seg(t, at, at + .3);
     el.style.opacity = p; el.style.transform = `scale(${pop(p)})`; el.style.background = bg; el.style.color = fg; };
-  vote("cv", 4.7, "#132a26", "#5eead4");
-  vote("sv", 5.1, "#2a2410", "#fbbf24");
+  const VC = { ADD: ["#132a26", "#5eead4"], WATCH: ["#2a2410", "#fbbf24"], TRIM: ["#2a1630", "#f472b6"] };
+  vote("cv", 4.7, ...VC[CONTENT.chartistVote]);
+  vote("sv", 5.1, ...VC[CONTENT.strategistVote]);
 
   // 4 · the Call stamps
   activate("call", t >= 5.7 && t < 9.6, "#5eead4");
@@ -239,11 +244,17 @@ window.render = function (t) {
 
   // 6 · scorecard: today, 5 days, 20 days
   activate("grade", t >= 7.9 && t < 9.6, "#5eead4");
-  const tf = seg(t, 8.0, 9.0);
+  const tf = seg(t, 8.0, 8.6) * 0.4;   // graded up to 5 days; 20 days is still pending
+  const ml = document.getElementById("ml1");
+  ml.textContent = t >= 8.5 ? CONTENT.grade.d5 : "5 days";
+  ml.style.color = t >= 8.5 ? "#e6edf7" : "";
   document.getElementById("trackFill").style.width = (tf * 100) + "%";
-  marks.forEach(([, p], i) => { const d = document.getElementById("dot" + i), on = tf >= p - 1e-6 && t >= 8.0;
+  const gs = document.getElementById("gradeSub");
+  gs.textContent = t >= 8.6 ? CONTENT.grade.note : "every call is graded against the market";
+  gs.style.color = t >= 8.6 ? "#c7d2e3" : ""; gs.style.opacity = t >= 8.6 ? seg(t, 8.6, 8.9) : 1;
+  marks.forEach(([, p], i) => { const d = document.getElementById("dot" + i), on = i < 2 && tf >= p - 1e-6 && t >= 8.0;
     d.style.background = on ? "#5eead4" : "#1c2b4a"; d.style.borderColor = on ? "#5eead4" : "#2a3b5c";
-    const q = seg(t, 8.0 + p, 8.15 + p);   // each dot pops as the line reaches it
+    const q = seg(t, 8.0 + p * 1.2, 8.15 + p * 1.2);   // each dot pops as the line reaches it
     d.innerHTML = on ? I.check : ""; d.style.transform = `scale(${on && q > 0 && q < 1 ? pop(q) : 1})`; });
 };
 window.DURATION = DURATION;
