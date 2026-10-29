@@ -1,5 +1,4 @@
 <p align="center"><img src="docs/img/desk.gif" alt="AI Market Desk: six AI agents, one rules engine, graded daily. One real alert, start to finish: the scanner flags AMZN, the Tape Reader finds why, two lenses disagree, the Call says watch, do not chase, the email lands, and five days later the Scorecard grades it" width="100%"></p>
-<p align="center"><sub>A real alert from Oct 19, 2026, text shortened to fit. Rebuilt from <a href="docs/anim/desk.html"><code>docs/anim/desk.html</code></a> by <code>node docs/anim/render.js</code>.</sub></p>
 
 <p align="center">
   <a href="../../actions/workflows/ci.yml"><img src="../../actions/workflows/ci.yml/badge.svg" alt="CI"></a>
