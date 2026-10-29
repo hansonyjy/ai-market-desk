@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#16213b"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4f46e5" stop-opacity="0"/><stop offset=".35" stop-color="#818cf8"/>
+      <stop offset="1" stop-color="#5eead4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" rx="18" fill="url(#bg)"/>
+  <!-- a price line with signal markers -->
+  <path d="M600 230 L640 222 L680 226 L720 205 L760 214 L800 188 L840 196 L880 160 L920 172 L960 138 L1000 150 L1040 112 L1080 124 L1120 92 L1160 100"
+        fill="none" stroke="url(#line)" stroke-width="3"/>
+  <circle cx="880" cy="160" r="6" fill="#5eead4"/><circle cx="1040" cy="112" r="6" fill="#5eead4"/>
+  <circle cx="760" cy="214" r="6" fill="#f472b6"/>
+  <rect x="965" y="64" width="150" height="26" rx="13" fill="#132a26" stroke="#14b8a6"/>
+  <text x="978" y="82" fill="#99f6e4" font-size="13" font-weight="600">breakout · sourced</text>
+  <rect x="640" y="238" width="170" height="26" rx="13" fill="#2a1630" stroke="#db2777"/>
+  <text x="653" y="256" fill="#fbcfe8" font-size="13" font-weight="600">gap down · thesis intact</text>
+  <text x="56" y="112" fill="#e6edf7" font-size="54" font-weight="800" letter-spacing="-1">AI Market Desk</text>
+  <text x="58" y="156" fill="#a5b4fc" font-size="22" font-weight="600">A multi-agent AI market desk</text>
+  <text x="58" y="198" fill="#8b9bb4" font-size="17">Watches the Nasdaq-100. Explains every move with sources.</text>
+  <text x="58" y="224" fill="#8b9bb4" font-size="17">Argues three views. Grades itself against the market.</text>
+</svg>
