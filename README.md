@@ -24,6 +24,28 @@ I designed and built it end to end, as a product and as a system: what an invest
 - **VIP breaking news.** For the few names you follow most closely: material headlines every 15 minutes, with opinion pieces and recycled stories filtered out.
 - **Answers.** Reply to any alert ("where is support if this keeps falling?") and the right specialist answers in the same thread.
 
+## How it works
+
+<p align="center"><img src="docs/img/architecture.svg" alt="Architecture: scanner, Tape Reader, two lenses, the Call, email, Ask the desk, and the grading loop" width="100%"></p>
+
+- **Free until something happens.** Plain rules scan every name every 15 minutes: gaps, breakouts, volume spikes, fast moves, 200-day pullbacks, your levels. No AI runs until a rule fires.
+- **Only the strongest hits get read.** On 500 names a busy open can fire dozens of rules. Each scan ranks its hits by volume, size of move and setup, and only the top 8 go to the agents. The rest still go in the Signal Log, tagged `triage_cut`.
+- **Explains the move, or says it can't.** A *Tape Reader* agent finds the catalyst in today's news, with links. No source, no claim.
+- **Two lenses that are allowed to disagree.** A *Chartist* (levels, trend, DeMark exhaustion, leadership) and a *Strategist* (liquidity, sentiment, breadth) each vote *add / trim / watch*. A fixed rule set, not a model, makes the final Call.
+- **It grades itself.** Every hit, read, vote and email is logged and scored against the market at 5 and 20 days.
+
+| Agent | Job | Model |
+| --- | --- | --- |
+| [Scanner](charters/01-scanner.md) | Plain timing rules on every name, every 15 minutes | none, $0 |
+| [Tape Reader](charters/02-tape-reader.md) | Why is it moving right now? Buying, selling or noise, with sources | Sonnet + web search |
+| [Chartist lens](charters/04-chartist-lens.md) | Support and resistance from a computed list, trend, exhaustion, leadership | Sonnet, low effort |
+| [Strategist lens](charters/05-strategist-lens.md) | Does this move fit or fight today's tape? | Haiku |
+| [What they said](charters/07-what-they-said.md) | Real, dated public comments from the strategists the lenses follow | Sonnet + web search, daily |
+| [VIP filter](charters/08-vip-filter.md) | Keeps only material breaking news for VIP names | Haiku |
+| [Ask the desk](charters/09-ask-desk.md) | Answers replies in-thread, as the right specialist | Sonnet + web search |
+
+Each agent's instructions live in one file in [`charters/`](charters/). The code sends exactly that file, so prompts are reviewed like code.
+
 ## Make it yours
 
 The S&P 500 is only the default. The stock list is one CSV file, or one tab in a Google Sheet. Swap in what you own and what you are waiting to buy:
@@ -60,28 +82,6 @@ desk demo
 `desk demo` replays a **recorded live session** (real prices, real headlines, real model output) through the same pipeline, completely offline. It needs no API key, calls no model and costs nothing. The emails it would have sent land in `out/demo/mail/`.
 
 <!-- DEMO: terminal capture of `desk demo` (docs/img/demo.png) -->
-
-## How it works
-
-- **Free until something happens.** Plain rules scan every name every 15 minutes: gaps, breakouts, volume spikes, fast moves, 200-day pullbacks, your levels. No AI runs until a rule fires.
-- **Only the strongest hits get read.** On 500 names a busy open can fire dozens of rules. Each scan ranks its hits by volume, size of move and setup, and only the top 8 go to the agents. The rest still go in the Signal Log, tagged `triage_cut`.
-- **Explains the move, or says it can't.** A *Tape Reader* agent finds the catalyst in today's news, with links. No source, no claim.
-- **Two lenses that are allowed to disagree.** A *Chartist* (levels, trend, DeMark exhaustion, leadership) and a *Strategist* (liquidity, sentiment, breadth) each vote *add / trim / watch*. A fixed rule set, not a model, makes the final Call.
-- **It grades itself.** Every hit, read, vote and email is logged and scored against the market at 5 and 20 days.
-
-<p align="center"><img src="docs/img/architecture.svg" alt="Architecture: scanner, Tape Reader, two lenses, the Call, email, Ask the desk, and the grading loop" width="100%"></p>
-
-| Agent | Job | Model |
-| --- | --- | --- |
-| [Scanner](charters/01-scanner.md) | Plain timing rules on every name, every 15 minutes | none, $0 |
-| [Tape Reader](charters/02-tape-reader.md) | Why is it moving right now? Buying, selling or noise, with sources | Sonnet + web search |
-| [Chartist lens](charters/04-chartist-lens.md) | Support and resistance from a computed list, trend, exhaustion, leadership | Sonnet, low effort |
-| [Strategist lens](charters/05-strategist-lens.md) | Does this move fit or fight today's tape? | Haiku |
-| [What they said](charters/07-what-they-said.md) | Real, dated public comments from the strategists the lenses follow | Sonnet + web search, daily |
-| [VIP filter](charters/08-vip-filter.md) | Keeps only material breaking news for VIP names | Haiku |
-| [Ask the desk](charters/09-ask-desk.md) | Answers replies in-thread, as the right specialist | Sonnet + web search |
-
-Each agent's instructions live in one file in [`charters/`](charters/). The code sends exactly that file, so prompts are reviewed like code.
 
 ## What the emails look like
 
