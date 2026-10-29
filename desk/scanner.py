@@ -106,6 +106,9 @@ CFG = {
     "MOVE_COOLDOWN_MIN": env("MOVE_COOLDOWN_MIN", 120, int),
     "DIGEST_UNTIL_MIN": env("DIGEST_UNTIL_MIN", 45, int),   # SHORT hits before 10:15 ET go in one digest
     "DAY_MOVE_ATR": env("DAY_MOVE_ATR", 1.5, float),        # day move: at least MOVE_PCT and this many normal days
+    # Triage: on 500 names a busy open can have dozens of hits. Only the strongest names get a
+    # Tape Reader read, and only a read can become an email. The rest are logged.
+    "MAX_READS_PER_SCAN": env("MAX_READS_PER_SCAN", 8, int),
 }
 
 # Approximate cumulative share of a US trading day's volume by minutes since
@@ -889,10 +892,49 @@ def worth_reading(flags: list[Flag], state: dict, today: date) -> list[Flag]:
     return keep
 
 
+def hit_score(fs: list[Flag]) -> float:
+    """How strongly one name's hits ask for a read. Volume and the size of the
+    move lead; a LONG setup or a new story (fast move, gap reversal) adds weight,
+    and each extra rule on the same name adds a little. Plain arithmetic, so the
+    ranking is easy to check in the log."""
+    rvol = max((f.rvol or 0) for f in fs)
+    move = max(abs(f.day_change_pct or 0) for f in fs)
+    score = min(rvol, 5.0) + min(move, 10.0) / 2
+    if any(f.horizon == "LONG" for f in fs):
+        score += 1.5
+    if any(f.rule in NEW_STORY_RULES for f in fs):
+        score += 1.0
+    score += 0.5 * (len({f.rule for f in fs}) - 1)
+    return round(score, 2)
+
+
+def triage(flags: list[Flag], limit: Optional[int] = None) -> list[Flag]:
+    """Keep the hits of the `limit` highest-scoring names, strongest first. VIP
+    hits are always kept. Cut hits stay in the Signal Log, tagged triage_cut."""
+    limit = CFG["MAX_READS_PER_SCAN"] if limit is None else limit
+    by: dict[str, list[Flag]] = {}
+    for f in flags:
+        by.setdefault(f.ticker, []).append(f)
+    score = {t: hit_score(fs) for t, fs in by.items()}
+    ranked = sorted(by, key=lambda t: (-score[t], t))
+    vip = [t for t in ranked if any(f.horizon == "VIP" for f in by[t])]
+    rest = [t for t in ranked if t not in vip]
+    if limit <= 0 or len(rest) <= limit:
+        return [f for t in vip + rest for f in by[t]]
+    keep, cut = rest[:limit], rest[limit:]
+    for t in cut:
+        for f in by[t]:
+            f.tags.append("triage_cut")
+    log.info("triage: read top %d of %d name(s): %s | cut: %s", limit, len(rest),
+             ", ".join(f"{t} {score[t]}" for t in keep), ", ".join(cut))
+    return [f for t in vip + keep for f in by[t]]
+
+
 def read_tape(flags: list[Flag], state: dict, today: date, client=None, dry_run: bool = False,
               news_fn=None) -> dict:
-    """Ask the Tape Reader why the flagged names are moving. Skipped (hits are still
-    logged) when no API key is set or today's AI budget is used up."""
+    """Ask the Tape Reader why the flagged names are moving, strongest names first
+    (see triage). Skipped (hits are still logged) when no API key is set or today's
+    AI budget is used up."""
     if not flags:
         return {}
     if not env("ANTHROPIC_API_KEY") and client is None:
@@ -905,7 +947,7 @@ def read_tape(flags: list[Flag], state: dict, today: date, client=None, dry_run:
         flags = [f for f in flags if f.horizon not in full]
         if skipped:
             log.info("email cap used for %s today; no read for %s", "/".join(sorted(full)), ",".join(skipped))
-    flags = worth_reading(flags, state, today)
+    flags = triage(worth_reading(flags, state, today))
     if not flags:
         return {}
     if dry_run:
@@ -915,7 +957,7 @@ def read_tape(flags: list[Flag], state: dict, today: date, client=None, dry_run:
         used = b.get("calls", 0) if b.get("date") == today.isoformat() else 0
         state["ai_budget"] = {"date": today.isoformat(),
                               "calls": max(used, ai.DAILY_AI_CALLS - DRY_RUN_AI_CALLS)}
-    tickers = sorted({f.ticker for f in flags})
+    tickers = list(dict.fromkeys(f.ticker for f in flags))   # strongest first
     news = (news_fn or company_news)(tickers, today - timedelta(days=1), today)
     log.info("finnhub headlines for %d of %d name(s)", len(news), len(tickers))
     try:

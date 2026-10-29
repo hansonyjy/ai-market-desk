@@ -463,6 +463,24 @@ for _t, _h in [("TSLA", "Barclays upgrades Tesla, says SpaceX merger now a key p
     assert s.vip_reject(_c, _t, _h, "https://finance.yahoo.com/x") == "", _h
 print("vip gate keeps last week's good items")
 
+# ---- triage: on 500 names only the strongest hits get a read (Oct 29, S&P 500)
+F = s.Flag
+weak = [F(t, "SHORT", "volume_spike", "x", 10, 2.6, 1.0, "2026-10-29") for t in "ABCDEFGHIJ"]
+big = F("ZZZ", "SHORT", "gap_up", "x", 10, 4.0, 6.0, "2026-10-29")                 # heavy volume, big move
+setup = F("YYY", "LONG", "pullback_200dma", "x", 10, 1.2, -1.0, "2026-10-29")      # a LONG setup
+two = [F("XXX", "SHORT", "gap_up", "x", 10, 3.0, 3.5, "2026-10-29"),
+       F("XXX", "SHORT", "fast_move", "x", 10, 3.0, 3.5, "2026-10-29")]           # two rules, one a new story
+vip = F("TSLA", "VIP", "vip_move", "x", 10, 1.0, 0.5, "2026-10-29")
+assert s.hit_score([big]) == 7.0 and s.hit_score(two) == 6.25 and s.hit_score([setup]) == 3.2
+kept = s.triage(weak + [big, setup, vip] + two, limit=3)
+names = list(dict.fromkeys(f.ticker for f in kept))
+assert names == ["TSLA", "ZZZ", "XXX", "YYY"], names                          # VIP first, then strongest 3
+assert len([f for f in kept if f.ticker == "XXX"]) == 2                       # a kept name keeps all its hits
+assert all("triage_cut" in f.tags for f in weak) and not big.tags            # cut hits are tagged for the log
+assert s.triage(weak[:2], limit=3) == weak[:2]                                # under the limit: nothing cut
+assert len(s.triage(weak, limit=0)) == 10                                     # 0 turns triage off
+print("triage ok")
+
 # ---- earnings: one calendar call per week covers every name (500 calls would take 9+ minutes)
 import os
 calls = []

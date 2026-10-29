@@ -320,8 +320,10 @@ assert set(r) == {"BBB"} and "AAA" not in ec.calls[0]["messages"][0]["content"] 
 st = {"ai_budget": {"date": d1.isoformat(), "calls": 3}}
 many_flags = [s.Flag(t, "SHORT", "gap_up", "x", 1, 2, 3, "2026-10-06") for t in "ABCDEFGHIJKLMNOPQRSTUVWX"]
 ec = EchoClient()
+s.CFG["MAX_READS_PER_SCAN"] = 0                                                      # triage off: test the dry-run cap alone
 s.read_tape(many_flags, st, d1, client=ec, dry_run=True, news_fn=lambda *a: {})
-assert len(ec.calls) == s.DRY_RUN_AI_CALLS - 4                                      # 4 kept: Chartist, the lookup,
+s.CFG["MAX_READS_PER_SCAN"] = 8
+assert len(ec.calls) == s.DRY_RUN_AI_CALLS - 4                                     # 4 kept: Chartist, the lookup,
 assert all(ai.take_budget(st, d1) for _ in range(4)) and not ai.take_budget(st, d1)  # Strategist, the market read
 os.environ.pop("ANTHROPIC_API_KEY")
 

@@ -319,7 +319,7 @@ def tape_reader(flags: list[dict], *, today: date, client=None, take_budget=None
     by_ticker: dict[str, list[dict]] = {}
     for f in flags:
         by_ticker.setdefault(f["ticker"], []).append(f)
-    tickers = sorted(by_ticker)
+    tickers = list(by_ticker)   # in the order given: strongest first, so a budget cut drops the weakest
     reads: dict[str, dict] = {}
     client = client or _client()
     for i in range(0, len(tickers), NAMES_PER_CALL):
