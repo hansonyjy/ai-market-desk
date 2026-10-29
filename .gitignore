@@ -1,0 +1,17 @@
+# secrets and local state: never committed
+.env
+.env.*
+!.env.example
+*.json.key
+service-account*.json
+.desk/
+out/
+# python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+build/
+dist/
+*.log
+.DS_Store
