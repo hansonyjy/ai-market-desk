@@ -501,7 +501,7 @@ class Sheet:
         if self.sh:
             rows = self.sh.worksheet(self.universe_tab).get_all_records()
         else:
-            src = env("UNIVERSE_CSV") or str(CONFIG / "universe.csv")   # the Nasdaq-100 by default
+            src = env("UNIVERSE_CSV") or str(CONFIG / "universe.csv")   # the S&P 500 by default
             if not src:
                 raise SystemExit("No Sheet credentials. For a local run set GOOGLE_CREDS_JSON, "
                                  "or UNIVERSE_CSV to a CSV file of the Universe tab.")
@@ -960,9 +960,10 @@ SECTOR_WORDS = {
     "XLK": ["tech"], "SMH": ["semi", "chip", "tech"], "XSW": ["software", "tech"],
     "HACK": ["cyber", "software", "tech"], "XLC": ["communication", "internet", "media"],
     "XLY": ["consumer", "discretionary", "retail"], "XLP": ["staples", "consumer"],
-    "XLF": ["financial", "payment", "crypto"], "VHT": ["health", "medtech"], "XBI": ["biotech", "health"],
+    "XLF": ["financial", "bank", "insur", "payment", "crypto"], "VHT": ["health", "pharma", "medtech"], "XBI": ["biotech", "health"],
     "XLI": ["industrial", "aerospace", "transport"], "XLE": ["energy", "oil"], "XLB": ["material"],
     "VPU": ["utilit", "power"],
+    "XLRE": ["real estate", "reit", "property"],
 }
 
 

@@ -1,101 +1,502 @@
 Ticker,Name,Status,Priority,Target entry level,Trim level,Theme
-NVDA,Nvidia,Holding,Normal,,,Semis / AI
-AAPL,Apple,Holding,Normal,,,Mag7
-MSFT,Microsoft,Holding,Normal,,,Mag7 / AI
-GOOGL,Alphabet,Holding,Normal,,,Mag7 / AI
-MU,Micron Technology,Holding,Normal,,,Memory / semis
-AMZN,Amazon,Holding,Normal,,,Mag7 / cloud
-AMD,Advanced Micro Devices,Holding,Normal,,,Semis / AI
-TSLA,Tesla,Holding,VIP,,,EV / Mag7
-META,Meta Platforms,Holding,Normal,,,Mag7 / AI
-SPCX,SpaceX,Holding,VIP,,,Space / satellites
-WMT,Walmart,Holding,Normal,,,Consumer staples
-AVGO,Broadcom,Holding,Normal,,,Semis / AI
-INTC,Intel,Holding,Normal,,,Semis
-PLTR,Palantir Technologies,Holding,Normal,,,Software / AI
-COST,Costco,Holding,Normal,,,Consumer staples
-CSCO,Cisco,Holding,Normal,,,Networking
-PANW,Palo Alto Networks,Holding,Normal,,,Cybersecurity
-AMAT,Applied Materials,Holding,Normal,,,Semi equipment
-LRCX,Lam Research,Holding,Normal,,,Semi equipment
-TXN,Texas Instruments,Holding,Normal,,,Semis
-CRWD,CrowdStrike,Holding,Normal,,,Cybersecurity
-NFLX,Netflix,Holding,Normal,,,Media / streaming
-AMGN,Amgen,Holding,Normal,,,Biotech
-LIN,Linde,Holding,Normal,,,Materials
-MRVL,Marvell Technology,Holding,Normal,,,Semis / AI infra
-SHOP,Shopify,Holding,Normal,,,E-commerce / software
-ADI,Analog Devices,Holding,Normal,,,Semis
-GILD,Gilead Sciences,Holding,Normal,,,Biotech
-KLAC,KLA Corporation,Holding,Normal,,,Semi equipment
-QCOM,Qualcomm,Holding,Normal,,,Semis
-PEP,PepsiCo,Holding,Normal,,,Consumer staples
-SNDK,Sandisk,Holding,Normal,,,Memory / storage
-ISRG,Intuitive Surgical,Holding,Normal,,,Medtech
-TMUS,T-Mobile US,Holding,Normal,,,Telecom
-ASML,ASML Holding,Holding,Normal,,,Semi equipment
-STX,Seagate Technology,Holding,Normal,,,Memory / storage
-FTNT,Fortinet,Holding,Normal,,,Cybersecurity
-VRTX,Vertex Pharmaceuticals,Holding,Normal,,,Biotech
-WDC,Western Digital,Holding,Normal,,,Memory / storage
-ADP,Automatic Data Processing,Holding,Normal,,,Business services
-SBUX,Starbucks,Holding,Normal,,,Consumer discretionary
-BKNG,Booking Holdings,Holding,Normal,,,Travel
-ADBE,Adobe,Holding,Normal,,,Software
-MAR,Marriott International,Holding,Normal,,,Travel
-ARM,Arm Holdings,Holding,Normal,,,Semis / AI
-CSX,CSX Corporation,Holding,Normal,,,Rails / transport
-DDOG,Datadog,Holding,Normal,,,Software / cloud
-INTU,Intuit,Holding,Normal,,,Software
-MNST,Monster Beverage,Holding,Normal,,,Consumer staples
-CDNS,Cadence Design Systems,Holding,Normal,,,Semi software
-CTAS,Cintas,Holding,Normal,,,Business services
-CEG,Constellation Energy,Holding,Normal,,,Power / nuclear
-SNPS,Synopsys,Holding,Normal,,,Semi software
-MELI,Mercado Libre,Holding,Normal,,,E-commerce
-REGN,Regeneron Pharmaceuticals,Holding,Normal,,,Biotech
-APP,AppLovin,Holding,Normal,,,Software / ads
-MRNA,Moderna,Holding,Normal,,,Biotech
-MDLZ,Mondelez International,Holding,Normal,,,Consumer staples
-CMCSA,Comcast,Holding,Normal,,,Media / telecom
-ROST,Ross Stores,Holding,Normal,,,Retail
-LITE,Lumentum,Holding,Normal,,,Optical / semis
-ORLY,O'Reilly Automotive,Holding,Normal,,,Retail
-ABNB,Airbnb,Holding,Normal,,,Travel
-AEP,American Electric Power,Holding,Normal,,,Utilities
-DASH,DoorDash,Holding,Normal,,,Consumer internet
-HON,Honeywell Technologies,Holding,Normal,,,Industrials
-NXPI,NXP Semiconductors,Holding,Normal,,,Semis
-FAST,Fastenal,Holding,Normal,,,Industrials
-FANG,Diamondback Energy,Holding,Normal,,,Energy
-MPWR,Monolithic Power Systems,Holding,Normal,,,Semis
-BKR,Baker Hughes,Holding,Normal,,,Energy
-PCAR,Paccar,Holding,Normal,,,Industrials
-ADSK,Autodesk,Holding,Normal,,,Software
-HONA,Honeywell Aerospace,Holding,Normal,,,Aerospace
-PDD,PDD Holdings,Holding,Normal,,,E-commerce
-MSTR,MicroStrategy,Holding,Normal,,,Crypto
-CCEP,Coca-Cola Europacific Partners,Holding,Normal,,,Consumer staples
-KDP,Keurig Dr Pepper,Holding,Normal,,,Consumer staples
-TER,Teradyne,Holding,Normal,,,Semi equipment
-XEL,Xcel Energy,Holding,Normal,,,Utilities
-ALAB,Astera Labs,Holding,Normal,,,Semis / AI infra
-EXC,Exelon,Holding,Normal,,,Utilities
-PYPL,PayPal,Holding,Normal,,,Payments
-TRI,Thomson Reuters,Holding,Normal,,,Business services
-IDXX,Idexx Laboratories,Holding,Normal,,,Medtech
-ROP,Roper Technologies,Holding,Normal,,,Software
-MCHP,Microchip Technology,Holding,Normal,,,Semis
-PAYX,Paychex,Holding,Normal,,,Business services
-WDAY,Workday,Holding,Normal,,,Software
-TTWO,Take-Two Interactive,Holding,Normal,,,Gaming
-FER,Ferrovial,Holding,Normal,,,Infrastructure
-NBIS,Nebius Group,Holding,Normal,,,AI / cloud
-ODFL,Old Dominion,Holding,Normal,,,Rails / transport
-AXON,Axon Enterprise,Holding,Normal,,,Industrials
-GEHC,GE HealthCare,Holding,Normal,,,Medtech
-RKLB,Rocket Lab,Holding,Normal,,,Space / satellites
-ALNY,Alnylam Pharmaceuticals,Holding,Normal,,,Biotech
-DXCM,Dexcom,Holding,Normal,,,Medtech
-CPRT,Copart,Holding,Normal,,,Business services
-CRWV,CoreWeave,Holding,Normal,,,AI / cloud
+A,Agilent Technologies,Holding,Normal,,,Life Sciences Tools & Services
+AAPL,Apple,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+ABBV,AbbVie,Holding,Normal,,,Biotechnology
+ABNB,Airbnb,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+ABT,Abbott Laboratories,Holding,Normal,,,Health Care Equipment
+ACGL,Arch Capital,Holding,Normal,,,Property & Casualty Insurance
+ACN,Accenture,Holding,Normal,,,IT Consulting & Other Services
+ADBE,Adobe,Holding,Normal,,,Application Software
+ADI,Analog Devices,Holding,Normal,,,Semiconductors
+ADM,Archer Daniels Midland,Holding,Normal,,,Agricultural Products & Services
+ADP,Automatic Data Processing,Holding,Normal,,,Human Resource & Employment Services
+ADSK,Autodesk,Holding,Normal,,,Application Software
+AEE,Ameren,Holding,Normal,,,Multi-Utilities
+AEP,American Electric Power,Holding,Normal,,,Electric Utilities
+AES,AES,Holding,Normal,,,Independent Power Producers & Energy Traders
+AFL,Aflac,Holding,Normal,,,Life & Health Insurance
+AIG,American International,Holding,Normal,,,Multi-line Insurance
+AIZ,Assurant,Holding,Normal,,,Multi-line Insurance
+AJG,Arthur J. Gallagher &,Holding,Normal,,,Insurance Brokers
+AKAM,Akamai Technologies,Holding,Normal,,,Internet Services & Infrastructure
+ALB,Albemarle,Holding,Normal,,,Specialty Chemicals
+ALGN,Align Technology,Holding,Normal,,,Health Care Supplies
+ALL,Allstate,Holding,Normal,,,Property & Casualty Insurance
+ALLE,Allegion,Holding,Normal,,,Building Products
+AMAT,Applied Materials,Holding,Normal,,,Semiconductor Materials & Equipment
+AMCR,Amcor,Holding,Normal,,,Paper & Plastic Packaging Products & Materials
+AMD,Advanced Micro Devices,Holding,Normal,,,Semiconductors
+AME,Ametek,Holding,Normal,,,Electrical Components & Equipment
+AMGN,Amgen,Holding,Normal,,,Biotechnology
+AMP,Ameriprise Financial,Holding,Normal,,,Asset Management & Custody Banks
+AMT,American Tower,Holding,Normal,,,Telecom Tower REITs
+AMZN,Amazon,Holding,Normal,,,Broadline Retail
+ANET,Arista Networks,Holding,Normal,,,Communications Equipment
+AON,Aon,Holding,Normal,,,Insurance Brokers
+AOS,A. O. Smith,Holding,Normal,,,Building Products
+APA,APA,Holding,Normal,,,Oil & Gas Exploration & Production
+APD,Air Products,Holding,Normal,,,Industrial Gases
+APH,Amphenol,Holding,Normal,,,Electronic Components
+APO,Apollo Global Management,Holding,Normal,,,Asset Management & Custody Banks
+APP,AppLovin,Holding,Normal,,,Advertising
+APTV,Aptiv,Holding,Normal,,,Automotive Parts & Equipment
+ARE,Alexandria Real Estate Equities,Holding,Normal,,,Office REITs
+ARES,Ares Management,Holding,Normal,,,Asset Management & Custody Banks
+ATO,Atmos Energy,Holding,Normal,,,Gas Utilities
+AVGO,Broadcom,Holding,Normal,,,Semiconductors
+AVY,Avery Dennison,Holding,Normal,,,Paper & Plastic Packaging Products & Materials
+AWK,American Water Works,Holding,Normal,,,Water Utilities
+AXON,Axon Enterprise,Holding,Normal,,,Aerospace & Defense
+AXP,American Express,Holding,Normal,,,Consumer Finance
+AZO,AutoZone,Holding,Normal,,,Automotive Retail
+BA,Boeing,Holding,Normal,,,Aerospace & Defense
+BAC,Bank of America,Holding,Normal,,,Diversified Banks
+BALL,Ball,Holding,Normal,,,"Metal, Glass & Plastic Containers"
+BAX,Baxter International,Holding,Normal,,,Health Care Equipment
+BBY,Best Buy,Holding,Normal,,,Computer & Electronics Retail
+BDX,Becton Dickinson,Holding,Normal,,,Health Care Equipment
+BE,Bloom Energy,Holding,Normal,,,Electrical Components & Equipment
+BEN,Franklin Resources,Holding,Normal,,,Asset Management & Custody Banks
+BF-B,Brown–Forman,Holding,Normal,,,Distillers & Vintners
+BG,Bunge Global,Holding,Normal,,,Agricultural Products & Services
+BIIB,Biogen,Holding,Normal,,,Biotechnology
+BKNG,Booking,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+BKR,Baker Hughes,Holding,Normal,,,Oil & Gas Equipment & Services
+BLK,BlackRock,Holding,Normal,,,Asset Management & Custody Banks
+BMY,Bristol Myers Squibb,Holding,Normal,,,Pharmaceuticals
+BNY,BNY Mellon,Holding,Normal,,,Asset Management & Custody Banks
+BR,Broadridge Financial Solutions,Holding,Normal,,,Data Processing & Outsourced Services
+BRK-B,Berkshire Hathaway,Holding,Normal,,,Multi-Sector Holdings
+BRO,Brown & Brown,Holding,Normal,,,Insurance Brokers
+BSX,Boston Scientific,Holding,Normal,,,Health Care Equipment
+BX,Blackstone,Holding,Normal,,,Asset Management & Custody Banks
+BXP,BXP,Holding,Normal,,,Office REITs
+C,Citigroup,Holding,Normal,,,Diversified Banks
+CAH,Cardinal Health,Holding,Normal,,,Health Care Distributors
+CARR,Carrier Global,Holding,Normal,,,Building Products
+CASY,Casey's,Holding,Normal,,,Food Retail
+CAT,Caterpillar,Holding,Normal,,,Construction Machinery & Heavy Transportation Equipment
+CB,Chubb Limited,Holding,Normal,,,Property & Casualty Insurance
+CBOE,Cboe Global Markets,Holding,Normal,,,Financial Exchanges & Data
+CBRE,CBRE,Holding,Normal,,,Real Estate Services
+CCI,Crown Castle,Holding,Normal,,,Telecom Tower REITs
+CCL,Carnival,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+CDNS,Cadence Design Systems,Holding,Normal,,,Application Software
+CDW,CDW,Holding,Normal,,,Technology Distributors
+CEG,Constellation Energy,Holding,Normal,,,Electric Utilities
+CF,CF Industries,Holding,Normal,,,Fertilizers & Agricultural Chemicals
+CFG,Citizens Financial,Holding,Normal,,,Regional Banks
+CHD,Church & Dwight,Holding,Normal,,,Household Products
+CHRW,C.H. Robinson,Holding,Normal,,,Air Freight & Logistics
+CHTR,Charter Communications,Holding,Normal,,,Cable & Satellite
+CI,Cigna,Holding,Normal,,,Health Care Services
+CIEN,Ciena,Holding,Normal,,,Communications Equipment
+CINF,Cincinnati Financial,Holding,Normal,,,Property & Casualty Insurance
+CL,Colgate-Palmolive,Holding,Normal,,,Household Products
+CLX,Clorox,Holding,Normal,,,Household Products
+CMCSA,Comcast,Holding,Normal,,,Cable & Satellite
+CME,CME,Holding,Normal,,,Financial Exchanges & Data
+CMG,Chipotle Mexican Grill,Holding,Normal,,,Restaurants
+CMI,Cummins,Holding,Normal,,,Construction Machinery & Heavy Transportation Equipment
+CMS,CMS Energy,Holding,Normal,,,Multi-Utilities
+CNC,Centene,Holding,Normal,,,Managed Health Care
+CNP,CenterPoint Energy,Holding,Normal,,,Multi-Utilities
+COF,Capital One,Holding,Normal,,,Consumer Finance
+COHR,Coherent,Holding,Normal,,,Electronic Components
+COIN,Coinbase,Holding,Normal,,,Financial Exchanges & Data
+COO,Cooper Companies (The),Holding,Normal,,,Health Care Supplies
+COP,ConocoPhillips,Holding,Normal,,,Oil & Gas Exploration & Production
+COR,Cencora,Holding,Normal,,,Health Care Distributors
+COST,Costco,Holding,Normal,,,Consumer Staples Merchandise Retail
+CPAY,Corpay,Holding,Normal,,,Transaction & Payment Processing Services
+CPRT,Copart,Holding,Normal,,,Diversified Support Services
+CPT,Camden Property Trust,Holding,Normal,,,Multi-Family Residential REITs
+CRH,CRH,Holding,Normal,,,Construction Materials
+CRL,Charles River Laboratories,Holding,Normal,,,Life Sciences Tools & Services
+CRM,Salesforce,Holding,Normal,,,Application Software
+CRWD,CrowdStrike,Holding,Normal,,,Systems Software
+CSCO,Cisco,Holding,Normal,,,Communications Equipment
+CSGP,CoStar,Holding,Normal,,,Real Estate Services
+CSX,CSX,Holding,Normal,,,Rail Transportation
+CTAS,Cintas,Holding,Normal,,,Diversified Support Services
+CTSH,Cognizant,Holding,Normal,,,IT Consulting & Other Services
+CVNA,Carvana,Holding,Normal,,,Automotive Retail
+CVS,CVS Health,Holding,Normal,,,Health Care Services
+CVX,Chevron,Holding,Normal,,,Integrated Oil & Gas
+D,Dominion Energy,Holding,Normal,,,Multi-Utilities
+DAL,Delta Air Lines,Holding,Normal,,,Passenger Airlines
+DASH,DoorDash,Holding,Normal,,,Specialized Consumer Services
+DD,DuPont,Holding,Normal,,,Industrial Conglomerates
+DDOG,Datadog,Holding,Normal,,,Application Software
+DE,Deere &,Holding,Normal,,,Agricultural & Farm Machinery
+DECK,Deckers Brands,Holding,Normal,,,Footwear
+DELL,Dell Technologies,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+DG,Dollar General,Holding,Normal,,,Consumer Staples Merchandise Retail
+DGX,Quest Diagnostics,Holding,Normal,,,Health Care Services
+DHI,D. R. Horton,Holding,Normal,,,Homebuilding
+DHR,Danaher,Holding,Normal,,,Life Sciences Tools & Services
+DIS,Walt Disney Company (The),Holding,Normal,,,Movies & Entertainment
+DLR,Digital Realty,Holding,Normal,,,Data Center REITs
+DLTR,Dollar Tree,Holding,Normal,,,Consumer Staples Merchandise Retail
+DOC,Healthpeak Properties,Holding,Normal,,,Health Care REITs
+DOV,Dover,Holding,Normal,,,Industrial Machinery & Supplies & Components
+DOW,Dow,Holding,Normal,,,Commodity Chemicals
+DPZ,Domino's,Holding,Normal,,,Restaurants
+DRI,Darden Restaurants,Holding,Normal,,,Restaurants
+DTE,DTE Energy,Holding,Normal,,,Multi-Utilities
+DUK,Duke Energy,Holding,Normal,,,Electric Utilities
+DVA,DaVita,Holding,Normal,,,Health Care Services
+DVN,Devon Energy,Holding,Normal,,,Oil & Gas Exploration & Production
+DXCM,Dexcom,Holding,Normal,,,Health Care Equipment
+EBAY,eBay,Holding,Normal,,,Broadline Retail
+ECHO,EchoStar,Holding,Normal,,,Wireless Telecommunication Services
+ECL,Ecolab,Holding,Normal,,,Specialty Chemicals
+ED,Consolidated Edison,Holding,Normal,,,Multi-Utilities
+EFX,Equifax,Holding,Normal,,,Research & Consulting Services
+EG,Everest,Holding,Normal,,,Reinsurance
+EIX,Edison International,Holding,Normal,,,Electric Utilities
+EL,Estée Lauder Companies (The),Holding,Normal,,,Personal Care Products
+ELV,Elevance Health,Holding,Normal,,,Managed Health Care
+EME,Emcor,Holding,Normal,,,Construction & Engineering
+EMR,Emerson Electric,Holding,Normal,,,Electrical Components & Equipment
+EOG,EOG Resources,Holding,Normal,,,Oil & Gas Exploration & Production
+EQIX,Equinix,Holding,Normal,,,Data Center REITs
+EQT,EQT,Holding,Normal,,,Oil & Gas Exploration & Production
+ERIE,Erie Indemnity,Holding,Normal,,,Insurance Brokers
+ES,Eversource Energy,Holding,Normal,,,Electric Utilities
+ESS,Essex Property Trust,Holding,Normal,,,Multi-Family Residential REITs
+ETN,Eaton,Holding,Normal,,,Electrical Components & Equipment
+ETR,Entergy,Holding,Normal,,,Electric Utilities
+EVRG,Evergy,Holding,Normal,,,Electric Utilities
+EW,Edwards Lifesciences,Holding,Normal,,,Health Care Equipment
+EXC,Exelon,Holding,Normal,,,Electric Utilities
+EXE,Expand Energy,Holding,Normal,,,Oil & Gas Exploration & Production
+EXPD,Expeditors International,Holding,Normal,,,Air Freight & Logistics
+EXPE,Expedia,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+EXR,Extra Space Storage,Holding,Normal,,,Self-Storage REITs
+F,Ford Motor,Holding,Normal,,,Automobile Manufacturers
+FANG,Diamondback Energy,Holding,Normal,,,Oil & Gas Exploration & Production
+FAST,Fastenal,Holding,Normal,,,Trading Companies & Distributors
+FCX,Freeport-McMoRan,Holding,Normal,,,Copper
+FDS,FactSet,Holding,Normal,,,Financial Exchanges & Data
+FDX,FedEx,Holding,Normal,,,Air Freight & Logistics
+FDXF,FedEx Freight,Holding,Normal,,,Cargo Ground Transportation
+FE,FirstEnergy,Holding,Normal,,,Electric Utilities
+FERG,Ferguson Enterprises,Holding,Normal,,,Trading Companies & Distributors
+FFIV,F5,Holding,Normal,,,Communications Equipment
+FICO,Fair Isaac,Holding,Normal,,,Application Software
+FIS,Fidelity National Information Services,Holding,Normal,,,Transaction & Payment Processing Services
+FISV,Fiserv,Holding,Normal,,,Transaction & Payment Processing Services
+FITB,Fifth Third Bancorp,Holding,Normal,,,Regional Banks
+FIX,Comfort Systems USA,Holding,Normal,,,Construction & Engineering
+FLEX,Flex,Holding,Normal,,,Electronic Manufacturing Services
+FOXA,Fox,Holding,Normal,,,Broadcasting
+FRT,Federal Realty Investment Trust,Holding,Normal,,,Retail REITs
+FSLR,First Solar,Holding,Normal,,,Semiconductors
+FTNT,Fortinet,Holding,Normal,,,Systems Software
+FTV,Fortive,Holding,Normal,,,Industrial Machinery & Supplies & Components
+GD,General Dynamics,Holding,Normal,,,Aerospace & Defense
+GDDY,GoDaddy,Holding,Normal,,,Internet Services & Infrastructure
+GE,GE Aerospace,Holding,Normal,,,Aerospace & Defense
+GEHC,GE HealthCare,Holding,Normal,,,Health Care Equipment
+GEN,Gen Digital,Holding,Normal,,,Systems Software
+GEV,GE Vernova,Holding,Normal,,,Heavy Electrical Equipment
+GILD,Gilead Sciences,Holding,Normal,,,Biotechnology
+GIS,General Mills,Holding,Normal,,,Packaged Foods & Meats
+GL,Globe Life,Holding,Normal,,,Life & Health Insurance
+GLW,Corning,Holding,Normal,,,Electronic Components
+GM,General Motors,Holding,Normal,,,Automobile Manufacturers
+GNRC,Generac,Holding,Normal,,,Heavy Electrical Equipment
+GOOGL,Alphabet,Holding,Normal,,,Interactive Media & Services
+GPC,Genuine Parts,Holding,Normal,,,Distributors
+GPN,Global Payments,Holding,Normal,,,Transaction & Payment Processing Services
+GRMN,Garmin,Holding,Normal,,,Consumer Electronics
+GS,Goldman Sachs,Holding,Normal,,,Investment Banking & Brokerage
+GWW,W. W. Grainger,Holding,Normal,,,Industrial Machinery & Supplies & Components
+HAL,Halliburton,Holding,Normal,,,Oil & Gas Equipment & Services
+HAS,Hasbro,Holding,Normal,,,Leisure Products
+HBAN,Huntington Bancshares,Holding,Normal,,,Regional Banks
+HCA,HCA Healthcare,Holding,Normal,,,Health Care Facilities
+HD,Home Depot (The),Holding,Normal,,,Home Improvement Retail
+HIG,Hartford (The),Holding,Normal,,,Property & Casualty Insurance
+HII,Huntington Ingalls Industries,Holding,Normal,,,Aerospace & Defense
+HLT,Hilton Worldwide,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+HON,Honeywell Technologies,Holding,Normal,,,Industrial Conglomerates
+HONA,Honeywell Aerospace,Holding,Normal,,,Aerospace & Defense
+HOOD,Robinhood Markets,Holding,Normal,,,Investment Banking & Brokerage
+HPE,Hewlett Packard Enterprise,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+HPQ,HP Inc.,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+HRL,Hormel Foods,Holding,Normal,,,Packaged Foods & Meats
+HSIC,Henry Schein,Holding,Normal,,,Health Care Distributors
+HST,Host Hotels & Resorts,Holding,Normal,,,Hotel & Resort REITs
+HSY,Hershey Company (The),Holding,Normal,,,Packaged Foods & Meats
+HUBB,Hubbell,Holding,Normal,,,Industrial Machinery & Supplies & Components
+HUM,Humana,Holding,Normal,,,Managed Health Care
+HWM,Howmet Aerospace,Holding,Normal,,,Aerospace & Defense
+IBKR,Interactive Brokers,Holding,Normal,,,Investment Banking & Brokerage
+IBM,IBM,Holding,Normal,,,IT Consulting & Other Services
+ICE,Intercontinental Exchange,Holding,Normal,,,Financial Exchanges & Data
+IDXX,Idexx Laboratories,Holding,Normal,,,Health Care Equipment
+IEX,IDEX,Holding,Normal,,,Industrial Machinery & Supplies & Components
+IFF,International Flavors & Fragrances,Holding,Normal,,,Specialty Chemicals
+ILMN,Illumina,Holding,Normal,,,Life Sciences Tools & Services
+INCY,Incyte,Holding,Normal,,,Biotechnology
+INTC,Intel,Holding,Normal,,,Semiconductors
+INTU,Intuit,Holding,Normal,,,Application Software
+INVH,Invitation Homes,Holding,Normal,,,Single-Family Residential REITs
+IP,International Paper,Holding,Normal,,,Paper & Plastic Packaging Products & Materials
+IQV,IQVIA,Holding,Normal,,,Life Sciences Tools & Services
+IR,Ingersoll Rand,Holding,Normal,,,Industrial Machinery & Supplies & Components
+IRM,Iron Mountain,Holding,Normal,,,Other Specialized REITs
+ISRG,Intuitive Surgical,Holding,Normal,,,Health Care Equipment
+IT,Gartner,Holding,Normal,,,IT Consulting & Other Services
+ITW,Illinois Tool Works,Holding,Normal,,,Industrial Machinery & Supplies & Components
+IVZ,Invesco,Holding,Normal,,,Asset Management & Custody Banks
+J,Jacobs Solutions,Holding,Normal,,,Construction & Engineering
+JBHT,J.B. Hunt,Holding,Normal,,,Cargo Ground Transportation
+JBL,Jabil,Holding,Normal,,,Electronic Manufacturing Services
+JCI,Johnson Controls,Holding,Normal,,,Building Products
+JKHY,Jack Henry & Associates,Holding,Normal,,,Transaction & Payment Processing Services
+JNJ,Johnson & Johnson,Holding,Normal,,,Pharmaceuticals
+JPM,JPMorgan Chase,Holding,Normal,,,Diversified Banks
+KDP,Keurig Dr Pepper,Holding,Normal,,,Soft Drinks & Non-alcoholic Beverages
+KEY,KeyCorp,Holding,Normal,,,Regional Banks
+KEYS,Keysight Technologies,Holding,Normal,,,Electronic Equipment & Instruments
+KHC,Kraft Heinz,Holding,Normal,,,Packaged Foods & Meats
+KIM,Kimco Realty,Holding,Normal,,,Retail REITs
+KKR,KKR &,Holding,Normal,,,Asset Management & Custody Banks
+KLAC,KLA,Holding,Normal,,,Semiconductor Materials & Equipment
+KMB,Kimberly-Clark,Holding,Normal,,,Household Products
+KMI,Kinder Morgan,Holding,Normal,,,Oil & Gas Storage & Transportation
+KO,Coca-Cola Company (The),Holding,Normal,,,Soft Drinks & Non-alcoholic Beverages
+KR,Kroger,Holding,Normal,,,Food Retail
+KVUE,Kenvue,Holding,Normal,,,Personal Care Products
+L,Loews,Holding,Normal,,,Multi-line Insurance
+LDOS,Leidos,Holding,Normal,,,Diversified Support Services
+LEN,Lennar,Holding,Normal,,,Homebuilding
+LH,Labcorp,Holding,Normal,,,Health Care Services
+LHX,L3Harris,Holding,Normal,,,Aerospace & Defense
+LII,Lennox International,Holding,Normal,,,Building Products
+LIN,Linde,Holding,Normal,,,Industrial Gases
+LITE,Lumentum,Holding,Normal,,,Communications Equipment
+LLY,Lilly (Eli),Holding,Normal,,,Pharmaceuticals
+LMT,Lockheed Martin,Holding,Normal,,,Aerospace & Defense
+LNT,Alliant Energy,Holding,Normal,,,Electric Utilities
+LOW,Lowe's,Holding,Normal,,,Home Improvement Retail
+LRCX,Lam Research,Holding,Normal,,,Semiconductor Materials & Equipment
+LULU,Lululemon Athletica,Holding,Normal,,,"Apparel, Accessories & Luxury Goods"
+LUV,Southwest Airlines,Holding,Normal,,,Passenger Airlines
+LVS,Las Vegas Sands,Holding,Normal,,,Casinos & Gaming
+LYB,LyondellBasell,Holding,Normal,,,Specialty Chemicals
+LYV,Live Nation Entertainment,Holding,Normal,,,Movies & Entertainment
+MA,Mastercard,Holding,Normal,,,Transaction & Payment Processing Services
+MAA,Mid-America Apartment Communities,Holding,Normal,,,Multi-Family Residential REITs
+MAR,Marriott International,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+MAS,Masco,Holding,Normal,,,Building Products
+MCD,McDonald's,Holding,Normal,,,Restaurants
+MCHP,Microchip Technology,Holding,Normal,,,Semiconductors
+MCK,McKesson,Holding,Normal,,,Health Care Distributors
+MCO,Moody's,Holding,Normal,,,Financial Exchanges & Data
+MDLZ,Mondelez International,Holding,Normal,,,Packaged Foods & Meats
+MDT,Medtronic,Holding,Normal,,,Health Care Equipment
+MET,MetLife,Holding,Normal,,,Life & Health Insurance
+META,Meta Platforms,Holding,Normal,,,Interactive Media & Services
+MGM,MGM Resorts,Holding,Normal,,,Casinos & Gaming
+MKC,McCormick &,Holding,Normal,,,Packaged Foods & Meats
+MLM,Martin Marietta Materials,Holding,Normal,,,Construction Materials
+MMM,3M,Holding,Normal,,,Industrial Conglomerates
+MNST,Monster Beverage,Holding,Normal,,,Soft Drinks & Non-alcoholic Beverages
+MO,Altria,Holding,Normal,,,Tobacco
+MOS,Mosaic Company (The),Holding,Normal,,,Fertilizers & Agricultural Chemicals
+MPC,Marathon Petroleum,Holding,Normal,,,Oil & Gas Refining & Marketing
+MPWR,Monolithic Power Systems,Holding,Normal,,,Semiconductors
+MRK,Merck &,Holding,Normal,,,Pharmaceuticals
+MRNA,Moderna,Holding,Normal,,,Biotechnology
+MRSH,Marsh McLennan,Holding,Normal,,,Insurance Brokers
+MRVL,Marvell Technology,Holding,Normal,,,Semiconductors
+MS,Morgan Stanley,Holding,Normal,,,Investment Banking & Brokerage
+MSCI,MSCI,Holding,Normal,,,Financial Exchanges & Data
+MSFT,Microsoft,Holding,Normal,,,Systems Software
+MSI,Motorola Solutions,Holding,Normal,,,Communications Equipment
+MTB,M&T Bank,Holding,Normal,,,Regional Banks
+MTD,Mettler Toledo,Holding,Normal,,,Life Sciences Tools & Services
+MU,Micron Technology,Holding,Normal,,,Semiconductors
+NCLH,Norwegian Cruise Line,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+NDAQ,Nasdaq,Holding,Normal,,,Financial Exchanges & Data
+NDSN,Nordson,Holding,Normal,,,Industrial Machinery & Supplies & Components
+NEE,NextEra Energy,Holding,Normal,,,Multi-Utilities
+NEM,Newmont,Holding,Normal,,,Gold
+NFLX,Netflix,Holding,Normal,,,Movies & Entertainment
+NI,NiSource,Holding,Normal,,,Multi-Utilities
+NKE,Nike,Holding,Normal,,,"Apparel, Accessories & Luxury Goods"
+NOC,Northrop Grumman,Holding,Normal,,,Aerospace & Defense
+NOW,ServiceNow,Holding,Normal,,,Systems Software
+NRG,NRG Energy,Holding,Normal,,,Independent Power Producers & Energy Traders
+NSC,Norfolk Southern,Holding,Normal,,,Rail Transportation
+NTAP,NetApp,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+NTRS,Northern Trust,Holding,Normal,,,Asset Management & Custody Banks
+NUE,Nucor,Holding,Normal,,,Steel
+NVDA,Nvidia,Holding,Normal,,,Semiconductors
+NVR,NVR,Holding,Normal,,,Homebuilding
+NWSA,News Corp,Holding,Normal,,,Publishing
+NXPI,NXP Semiconductors,Holding,Normal,,,Semiconductors
+O,Realty Income,Holding,Normal,,,Retail REITs
+ODFL,Old Dominion,Holding,Normal,,,Cargo Ground Transportation
+OKE,Oneok,Holding,Normal,,,Oil & Gas Storage & Transportation
+OMC,Omnicom,Holding,Normal,,,Advertising
+ON,ON Semiconductor,Holding,Normal,,,Semiconductors
+ORCL,Oracle,Holding,Normal,,,Application Software
+ORLY,O'Reilly Automotive,Holding,Normal,,,Automotive Retail
+OTIS,Otis Worldwide,Holding,Normal,,,Industrial Machinery & Supplies & Components
+OXY,Occidental Petroleum,Holding,Normal,,,Oil & Gas Exploration & Production
+P,Everpure,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+PANW,Palo Alto Networks,Holding,Normal,,,Systems Software
+PAYX,Paychex,Holding,Normal,,,Human Resource & Employment Services
+PCAR,Paccar,Holding,Normal,,,Construction Machinery & Heavy Transportation Equipment
+PCG,PG&E,Holding,Normal,,,Multi-Utilities
+PEG,Public Service Enterprise,Holding,Normal,,,Electric Utilities
+PEP,PepsiCo,Holding,Normal,,,Soft Drinks & Non-alcoholic Beverages
+PFE,Pfizer,Holding,Normal,,,Pharmaceuticals
+PFG,Principal Financial,Holding,Normal,,,Life & Health Insurance
+PG,Procter & Gamble,Holding,Normal,,,Personal Care Products
+PGR,Progressive,Holding,Normal,,,Property & Casualty Insurance
+PH,Parker Hannifin,Holding,Normal,,,Industrial Machinery & Supplies & Components
+PHM,PulteGroup,Holding,Normal,,,Homebuilding
+PKG,Packaging Corporation of America,Holding,Normal,,,Paper & Plastic Packaging Products & Materials
+PLD,Prologis,Holding,Normal,,,Industrial REITs
+PLTR,Palantir Technologies,Holding,Normal,,,Application Software
+PM,Philip Morris International,Holding,Normal,,,Tobacco
+PNC,PNC Financial Services,Holding,Normal,,,Diversified Banks
+PNR,Pentair,Holding,Normal,,,Industrial Machinery & Supplies & Components
+PNW,Pinnacle West Capital,Holding,Normal,,,Multi-Utilities
+PODD,Insulet,Holding,Normal,,,Health Care Equipment
+PPG,PPG Industries,Holding,Normal,,,Specialty Chemicals
+PPL,PPL,Holding,Normal,,,Electric Utilities
+PRU,Prudential Financial,Holding,Normal,,,Life & Health Insurance
+PSA,Public Storage,Holding,Normal,,,Self-Storage REITs
+PSX,Phillips 66,Holding,Normal,,,Oil & Gas Refining & Marketing
+PTC,PTC,Holding,Normal,,,Application Software
+PWR,Quanta Services,Holding,Normal,,,Construction & Engineering
+PYPL,PayPal,Holding,Normal,,,Transaction & Payment Processing Services
+Q,Qnity Electronics,Holding,Normal,,,Semiconductor Materials & Equipment
+QCOM,Qualcomm,Holding,Normal,,,Semiconductors
+RCL,Royal Caribbean,Holding,Normal,,,"Hotels, Resorts & Cruise Lines"
+RDDT,Reddit,Holding,Normal,,,Interactive Media & Services
+REG,Regency Centers,Holding,Normal,,,Retail REITs
+REGN,Regeneron Pharmaceuticals,Holding,Normal,,,Biotechnology
+RF,Regions Financial,Holding,Normal,,,Regional Banks
+RJF,Raymond James Financial,Holding,Normal,,,Investment Banking & Brokerage
+RL,Ralph Lauren,Holding,Normal,,,"Apparel, Accessories & Luxury Goods"
+RMD,ResMed,Holding,Normal,,,Health Care Equipment
+ROK,Rockwell Automation,Holding,Normal,,,Electrical Components & Equipment
+ROL,Rollins,Holding,Normal,,,Environmental & Facilities Services
+ROP,Roper Technologies,Holding,Normal,,,Electronic Equipment & Instruments
+ROST,Ross Stores,Holding,Normal,,,Apparel Retail
+RSG,Republic Services,Holding,Normal,,,Environmental & Facilities Services
+RTX,RTX,Holding,Normal,,,Aerospace & Defense
+RVTY,Revvity,Holding,Normal,,,Health Care Equipment
+SBAC,SBA Communications,Holding,Normal,,,Telecom Tower REITs
+SBUX,Starbucks,Holding,Normal,,,Restaurants
+SCHW,Charles Schwab,Holding,Normal,,,Investment Banking & Brokerage
+SHW,Sherwin-Williams,Holding,Normal,,,Specialty Chemicals
+SJM,J.M. Smucker Company (The),Holding,Normal,,,Packaged Foods & Meats
+SKYD,Skydance,Holding,Normal,,,Movies & Entertainment
+SLB,Schlumberger,Holding,Normal,,,Oil & Gas Equipment & Services
+SMCI,Supermicro,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+SNA,Snap-on,Holding,Normal,,,Industrial Machinery & Supplies & Components
+SNDK,Sandisk,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+SNPS,Synopsys,Holding,Normal,,,Application Software
+SO,Southern,Holding,Normal,,,Electric Utilities
+SOLV,Solventum,Holding,Normal,,,Health Care Technology
+SPG,Simon Property,Holding,Normal,,,Retail REITs
+SPGI,S&P Global,Holding,Normal,,,Financial Exchanges & Data
+SRE,Sempra,Holding,Normal,,,Multi-Utilities
+STE,Steris,Holding,Normal,,,Health Care Equipment
+STLD,Steel Dynamics,Holding,Normal,,,Steel
+STT,State Street,Holding,Normal,,,Asset Management & Custody Banks
+STX,Seagate Technology,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+STZ,Constellation Brands,Holding,Normal,,,Distillers & Vintners
+SW,Smurfit Westrock,Holding,Normal,,,Paper & Plastic Packaging Products & Materials
+SWK,Stanley Black & Decker,Holding,Normal,,,Industrial Machinery & Supplies & Components
+SWKS,Skyworks Solutions,Holding,Normal,,,Semiconductors
+SYF,Synchrony Financial,Holding,Normal,,,Consumer Finance
+SYK,Stryker,Holding,Normal,,,Health Care Equipment
+SYY,Sysco,Holding,Normal,,,Food Distributors
+T,AT&T,Holding,Normal,,,Integrated Telecommunication Services
+TDG,TransDigm,Holding,Normal,,,Aerospace & Defense
+TDY,Teledyne Technologies,Holding,Normal,,,Electronic Equipment & Instruments
+TECH,Bio-Techne,Holding,Normal,,,Life Sciences Tools & Services
+TEL,TE Connectivity,Holding,Normal,,,Electronic Manufacturing Services
+TER,Teradyne,Holding,Normal,,,Semiconductor Materials & Equipment
+TFC,Truist Financial,Holding,Normal,,,Diversified Banks
+TGT,Target,Holding,Normal,,,Consumer Staples Merchandise Retail
+TJX,TJX Companies,Holding,Normal,,,Apparel Retail
+TKO,TKO,Holding,Normal,,,Movies & Entertainment
+TMO,Thermo Fisher Scientific,Holding,Normal,,,Life Sciences Tools & Services
+TMUS,T-Mobile US,Holding,Normal,,,Wireless Telecommunication Services
+TPL,Texas Pacific Land,Holding,Normal,,,Oil & Gas Exploration & Production
+TPR,Tapestry,Holding,Normal,,,"Apparel, Accessories & Luxury Goods"
+TRGP,Targa Resources,Holding,Normal,,,Oil & Gas Storage & Transportation
+TRMB,Trimble,Holding,Normal,,,Application Software
+TROW,T. Rowe Price,Holding,Normal,,,Asset Management & Custody Banks
+TRV,Travelers Companies (The),Holding,Normal,,,Property & Casualty Insurance
+TSCO,Tractor Supply,Holding,Normal,,,Other Specialty Retail
+TSLA,Tesla,Holding,VIP,,,Automobile Manufacturers
+TSN,Tyson Foods,Holding,Normal,,,Packaged Foods & Meats
+TT,Trane Technologies,Holding,Normal,,,Building Products
+TTWO,Take-Two Interactive,Holding,Normal,,,Interactive Home Entertainment
+TWLO,Twilio,Holding,Normal,,,Systems Software
+TXN,Texas Instruments,Holding,Normal,,,Semiconductors
+TXT,Textron,Holding,Normal,,,Aerospace & Defense
+TYL,Tyler Technologies,Holding,Normal,,,Application Software
+UAL,United Airlines,Holding,Normal,,,Passenger Airlines
+UBER,Uber,Holding,Normal,,,Passenger Ground Transportation
+UDR,UDR,Holding,Normal,,,Multi-Family Residential REITs
+UHS,Universal Health Services,Holding,Normal,,,Health Care Facilities
+ULTA,Ulta Beauty,Holding,Normal,,,Other Specialty Retail
+UNH,UnitedHealth,Holding,Normal,,,Managed Health Care
+UNP,Union Pacific,Holding,Normal,,,Rail Transportation
+UPS,United Parcel Service,Holding,Normal,,,Air Freight & Logistics
+URI,United Rentals,Holding,Normal,,,Trading Companies & Distributors
+USB,U.S. Bancorp,Holding,Normal,,,Diversified Banks
+V,Visa,Holding,Normal,,,Transaction & Payment Processing Services
+VEEV,Veeva Systems,Holding,Normal,,,Health Care Technology
+VICI,Vici Properties,Holding,Normal,,,Hotel & Resort REITs
+VLO,Valero Energy,Holding,Normal,,,Oil & Gas Refining & Marketing
+VLTO,Veralto,Holding,Normal,,,Environmental & Facilities Services
+VMC,Vulcan Materials,Holding,Normal,,,Construction Materials
+VMRK,Vivmark Residential,Holding,Normal,,,Multi-Family Residential REITs
+VRSK,Verisk Analytics,Holding,Normal,,,Research & Consulting Services
+VRSN,Verisign,Holding,Normal,,,Internet Services & Infrastructure
+VRT,Vertiv,Holding,Normal,,,Electrical Components & Equipment
+VRTX,Vertex Pharmaceuticals,Holding,Normal,,,Biotechnology
+VST,Vistra,Holding,Normal,,,Electric Utilities
+VTR,Ventas,Holding,Normal,,,Health Care REITs
+VTRS,Viatris,Holding,Normal,,,Pharmaceuticals
+VYLR,Vylor,Holding,Normal,,,Agricultural Products & Services
+VZ,Verizon,Holding,Normal,,,Integrated Telecommunication Services
+WAB,Wabtec,Holding,Normal,,,Construction Machinery & Heavy Transportation Equipment
+WAT,Waters,Holding,Normal,,,Life Sciences Tools & Services
+WDAY,Workday,Holding,Normal,,,Application Software
+WDC,Western Digital,Holding,Normal,,,"Technology Hardware, Storage & Peripherals"
+WEC,WEC Energy,Holding,Normal,,,Electric Utilities
+WELL,Welltower,Holding,Normal,,,Health Care REITs
+WFC,Wells Fargo,Holding,Normal,,,Diversified Banks
+WM,Waste Management,Holding,Normal,,,Environmental & Facilities Services
+WMB,Williams Companies,Holding,Normal,,,Oil & Gas Storage & Transportation
+WMT,Walmart,Holding,Normal,,,Consumer Staples Merchandise Retail
+WRB,W. R. Berkley,Holding,Normal,,,Property & Casualty Insurance
+WSM,Williams-Sonoma,Holding,Normal,,,Homefurnishing Retail
+WST,West Pharmaceutical Services,Holding,Normal,,,Health Care Supplies
+WTW,Willis Towers Watson,Holding,Normal,,,Insurance Brokers
+WY,Weyerhaeuser,Holding,Normal,,,Timber REITs
+WYNN,Wynn Resorts,Holding,Normal,,,Casinos & Gaming
+XEL,Xcel Energy,Holding,Normal,,,Multi-Utilities
+XOM,ExxonMobil,Holding,Normal,,,Integrated Oil & Gas
+XYL,Xylem,Holding,Normal,,,Industrial Machinery & Supplies & Components
+XYZ,Block,Holding,Normal,,,Transaction & Payment Processing Services
+YUM,Yum! Brands,Holding,Normal,,,Restaurants
+ZBH,Zimmer Biomet,Holding,Normal,,,Health Care Equipment
+ZBRA,Zebra Technologies,Holding,Normal,,,Electronic Equipment & Instruments
+ZTS,Zoetis,Holding,Normal,,,Pharmaceuticals
+SPCX,SpaceX,Watch,VIP,,,Space / satellites
