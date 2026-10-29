@@ -317,6 +317,12 @@ ec = EchoClient()
 fl = [s.Flag("AAA", "SHORT", "gap_up", "x", 1, 2, 3, "2026-10-06"), s.Flag("BBB", "LONG", "pullback_200dma", "x", 1, 2, 3, "2026-10-06")]
 r = s.read_tape(fl, st, d1, client=ec, news_fn=lambda *a: {})
 assert set(r) == {"BBB"} and "AAA" not in ec.calls[0]["messages"][0]["content"]     # SHORT cap full: no read
+st_long = {"email_budget": {"date": d1.isoformat(), "SHORT": 0, "LONG": 2}}
+ec = EchoClient()
+own_fl = [s.Flag("CCC", "LONG", "target_entry_hit", "x", 1, 2, 3, "2026-10-06"), s.Flag("DDD", "LONG", "pullback_200dma", "x", 1, 2, 3, "2026-10-06")]
+s.read_tape(own_fl, st_long, d1, client=ec, news_fn=lambda *a: {})
+sent_text = ec.calls[0]["messages"][0]["content"]
+assert "CCC" in sent_text and "DDD" not in sent_text                                 # LONG cap full: your level still read
 st = {"ai_budget": {"date": d1.isoformat(), "calls": 3}}
 many_flags = [s.Flag(t, "SHORT", "gap_up", "x", 1, 2, 3, "2026-10-06") for t in "ABCDEFGHIJKLMNOPQRSTUVWX"]
 ec = EchoClient()

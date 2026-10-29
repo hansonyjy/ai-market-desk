@@ -404,3 +404,33 @@ assert _files == ["001-nvda-up-3-0-broke-above-its-20-day-high.html", "001-nvda-
                   "002-second.txt"], _files
 os.environ.pop("DESK_EMAIL_SINK")
 print("email sink ok")
+
+# ---- your own levels: emailed even with no news, never stopped by a cap (Oct 29)
+def lvl(t, rule, ref, chg=-0.8, rvol=0.9):
+    return {"ticker": t, "horizon": "LONG", "rule": rule, "detail": "x", "price": ref, "rvol": rvol,
+            "day_change_pct": chg, "bar_date": "2026-10-05", "ref": ref, "tags": []}
+full = {"email_budget": {"date": today.isoformat(), "SHORT": 7, "LONG": 2, "VIP": 0}}   # both caps used up
+fl = [lvl("COST", "target_entry_hit", 850.0), lvl("NVDA", "trim_level_hit", 250.0, chg=1.2),
+      lvl("FALL", "target_entry_hit", 40.0, chg=-4.5, rvol=1.8), flag("ZZZ", "LONG", rule="pullback_200dma")]
+send, held = mailer.pick_alerts(fl, {}, full, today)                       # no reads at all
+assert sorted(a["ticker"] for a in send) == ["COST", "FALL", "NVDA"]     # your levels go out, caps or not
+assert not any(a["ticker"] == "ZZZ" for a in send + held)                # an ordinary hit still needs a source
+assert full["email_budget"]["LONG"] == 2                                  # and they used no cap
+by = {a["ticker"]: a for a in send}
+assert all(a["no_news"] and a["catalyst"] == mailer.NO_NEWS for a in send)
+assert mailer.call(by["COST"], "Watch") == "Consider adding"             # a quiet drift to your entry
+assert mailer.call(by["FALL"], "Watch") == "Watch"                       # a sharp drop with no news found: wait
+assert mailer.call(by["NVDA"], "Holding") == "Consider trimming"         # your trim level on a holding
+assert mailer.call(by["NVDA"], "Watch") == "Watch"                       # not held: nothing to trim
+secs = dict(mailer.sections(by["COST"]))
+assert secs["Why"] == mailer.NO_NEWS and "Read" not in secs and "your target entry level of" in secs["What happened"]
+assert "Sources: none found" in mailer.format_alert(by["COST"])
+assert "none found" in mailer.format_alert_html(by["COST"])
+assert "selling may not be finished" in dict(mailer.sections(by["FALL"])).get("Risk", "")
+# with a sourced read, your level keeps the read, even at low confidence
+src = {"COST": {"direction": "ACCUMULATION", "links": ["https://news.example.com/a"], "confidence": "low",
+                "catalyst": "Guidance raised.", "scope": "company"}}
+send, _ = mailer.pick_alerts([lvl("COST", "target_entry_hit", 850.0)], src, {}, today)
+assert send[0]["catalyst"] == "Guidance raised." and not send[0].get("no_news")
+assert mailer.OWN_LEVEL_RULES == s.OWN_LEVEL_RULES
+print("own levels ok")

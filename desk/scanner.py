@@ -347,7 +347,7 @@ def evaluate(ticker: str, bars: pd.DataFrame, meta: dict, now_et: datetime,
 
     # ---- LONG
     spun = corporate_action(bars)
-    if spun:   # the 200-day average spans a different company; the team's own levels still apply
+    if spun:   # the 200-day average spans a different company; your own levels still apply
         log.info("%s: corporate action on %s, 200-day signals skipped", ticker, spun)
     if len(prev) >= 200 and not spun:
         sma200 = float(prev["Close"].iloc[-200:].mean())
@@ -908,7 +908,8 @@ def hit_score(fs: list[Flag]) -> float:
     return round(score, 2)
 
 
-# A level the user set in the Universe is their own instruction: never cut by triage.
+# A level the user set in the Universe is their own instruction: never cut by
+# triage, never stopped by a daily cap (same set as mailer.OWN_LEVEL_RULES).
 OWN_LEVEL_RULES = {"target_entry_hit", "trim_level_hit"}
 
 
@@ -948,8 +949,9 @@ def read_tape(flags: list[Flag], state: dict, today: date, client=None, dry_run:
     from desk import ai
     full = full_horizons(state, today)
     if full:
-        skipped = sorted({f.ticker for f in flags if f.horizon in full})
-        flags = [f for f in flags if f.horizon not in full]
+        # Your own levels are emailed outside the caps, so they are still read.
+        skipped = sorted({f.ticker for f in flags if f.horizon in full and f.rule not in OWN_LEVEL_RULES})
+        flags = [f for f in flags if f.horizon not in full or f.rule in OWN_LEVEL_RULES]
         if skipped:
             log.info("email cap used for %s today; no read for %s", "/".join(sorted(full)), ",".join(skipped))
     flags = triage(worth_reading(flags, state, today))
@@ -1234,6 +1236,9 @@ def email_alerts(flags: list[Flag], reads: dict, state: dict, today: date, args,
         a["links"] = resolve_links(a["links"])
     add_levels(send, bars or {}, meta or {}, state, today, client)
     for a in send:   # each side's vote, for the Signal Log
+        if a.get("no_news"):   # log what was emailed, so the health check reads it as intended
+            r = reads.setdefault(a["ticker"], {})
+            r["catalyst"], r["links"] = mailer.NO_NEWS, []
         reads.setdefault(a["ticker"], {})["votes"] = {
             "call": a.get("call", ""), "chartist": (a.get("chartist") or {}).get("action", ""),
             "strategist": (a.get("strategist") or {}).get("action", "")}

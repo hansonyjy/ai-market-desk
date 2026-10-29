@@ -55,3 +55,10 @@ assert "Hypothesis tag: AXON" in body and "VIP sent 2" in body
 subj, _ = audit.compose([], "Logged 1 rows.", "2026-10-21")
 assert subj.endswith("all clear")
 print("all audit tests passed")
+
+# Oct 29: your own level, emailed with no news found, is not a sourcing failure
+from desk import mailer
+own = [H, row("2026-10-20 10:30", "COST", "LONG", "target_entry_hit | At/below target entry 850.00", "yes",
+              catalyst=mailer.NO_NEWS, chartist="add", strategist="watch")]
+assert not any("without a source" in m for _, m in audit.checks(own, state, universe, "2026-10-20", 40, caps))
+print("own level without news ok")

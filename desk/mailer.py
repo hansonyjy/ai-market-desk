@@ -51,6 +51,10 @@ def caps() -> dict[str, int]:
 
 
 # ---------------------------------------------------------------- what to send
+# Levels the user set in the Universe. Reaching one is the news itself, so it is
+# emailed even when no source explains the move, and it never uses up a daily cap.
+OWN_LEVEL_RULES = {"target_entry_hit", "trim_level_hit"}
+NO_NEWS = "No news found that explains this move."
 def pick_alerts(flags: list[dict], reads: dict, state: dict, today: date) -> tuple[list[dict], list[dict]]:
     """One alert per ticker. Returns (send, held). Counts today's sends in state."""
     by_ticker: dict[str, list[dict]] = {}
@@ -59,14 +63,19 @@ def pick_alerts(flags: list[dict], reads: dict, state: dict, today: date) -> tup
     eligible = []
     for t, fs in by_ticker.items():
         r = reads.get(t) or {}
+        own = any(f["rule"] in OWN_LEVEL_RULES for f in fs)
         if r.get("direction") not in ("ACCUMULATION", "DISTRIBUTION") or not r.get("links"):
-            continue
-        if r.get("confidence") == "low":
+            if not own:
+                continue
+            # Your own level with no sourced story: still sent, and it says so.
+            r = {"catalyst": NO_NEWS, "links": [], "direction": "", "confidence": "", "scope": "",
+                 "no_news": True}
+        elif r.get("confidence") == "low" and not own:
             continue                                   # logged for the Scorecard, not emailed
         horizon = "LONG" if any(f["horizon"] == "LONG" for f in fs) else "SHORT"
         if horizon == "SHORT" and max((f.get("rvol") or 0) for f in fs) < min_rvol():
             continue                                   # a move on thin volume is not confirmed
-        eligible.append({"ticker": t, "horizon": horizon, "flags": fs, **r})
+        eligible.append({"ticker": t, "horizon": horizon, "flags": fs, "own_level": own, **r})
     eligible.sort(key=lambda a: (CONF_RANK.get(a.get("confidence"), 3),
                                  -max((f.get("rvol") or 0) for f in a["flags"])))
     sent = state.get("email_budget") or {}
@@ -74,8 +83,10 @@ def pick_alerts(flags: list[dict], reads: dict, state: dict, today: date) -> tup
         sent = {"date": today.isoformat(), "SHORT": 0, "LONG": 0, "VIP": 0}
     limit = caps()
     send, held = [], []
-    for a in eligible:
-        if sent.get(a["horizon"], 0) < limit[a["horizon"]]:
+    for a in sorted(eligible, key=lambda a: not a["own_level"]):   # your levels first, outside the caps
+        if a["own_level"]:
+            send.append(a)
+        elif sent.get(a["horizon"], 0) < limit[a["horizon"]]:
             sent[a["horizon"]] = sent.get(a["horizon"], 0) + 1
             send.append(a)
         else:
@@ -140,6 +151,13 @@ SCOPE = {"company": "company news", "sector": "a sector-wide move", "macro": "a 
 EXCHANGE = {".TO": "TSX", ".V": "TSXV", ".NE": "Cboe Canada"}
 
 
+def horizon_label(a: dict) -> str:
+    """The label under the name. A trim level is an exit, not an entry."""
+    if a["horizon"] == "LONG" and any(f["rule"] == "trim_level_hit" for f in a["flags"]):
+        return "Your trim level"
+    return HORIZON.get(a["horizon"], a["horizon"])
+
+
 def show_ticker(t: str) -> str:
     """'IMO.TO' -> 'IMO (TSX)'. Email apps turn 'IMO.TO' into a link to the website
     imo.to (.to is a country domain), so a Canadian ticker is never written that way."""
@@ -183,9 +201,9 @@ def what_happened(f: dict, t: str = "") -> str:
         return (f"pulled back to within 2% of its 200-day average of {m(ref)}, after trading "
                 f"well above it (a level long-term buyers often defend)")
     if rule == "target_entry_hit" and ref is not None:
-        return f"reached the team's target entry level of {m(ref)}"
+        return f"reached your target entry level of {m(ref)}"
     if rule == "trim_level_hit" and ref is not None:
-        return f"reached the team's trim level of {m(ref)}"
+        return f"reached your trim level of {m(ref)}"
     if rule == "earnings_soon":
         when = f["detail"].split("(")[0].replace("Earnings ", "").strip()
         if "(0 trading" in f["detail"]:
@@ -228,7 +246,14 @@ def call(a: dict, status: str = "") -> str:
     held = status.strip().lower().startswith("hold")
     rules = {f["rule"] for f in a["flags"]}
     if held and "trim_level_hit" in rules:
-        return "Consider trimming"                     # the team's own level
+        return "Consider trimming"                     # your own level
+    if a.get("no_news"):
+        # Your entry level, reached with no story behind it: a quiet drift to your
+        # price is the entry you waited for; a sharp drop with no news found may
+        # be news the desk missed, so wait.
+        if "target_entry_hit" in rules and not any(sharp_drop(f) for f in a["flags"]):
+            return "Consider adding"
+        return "Watch"
     if a.get("confidence") == "low":
         return "Watch"
     if a.get("direction") == "DISTRIBUTION":
@@ -244,7 +269,7 @@ def call(a: dict, status: str = "") -> str:
     return "Watch"
 
 
-LEVEL_NAME = {"pullback_200dma": "the 200-day average", "target_entry_hit": "the team's target entry"}
+LEVEL_NAME = {"pullback_200dma": "the 200-day average", "target_entry_hit": "your target entry"}
 
 
 def risk_text(a: dict) -> str:
@@ -325,13 +350,14 @@ def sections(a: dict) -> list[tuple[str, str]]:
                                       f"[{_domain(c['url'])}]"))
     # "Thesis" wording only for company news: a sector or market move says nothing
     # about this name's thesis (Oct 16: QQQM in a rotation read "thesis at risk").
-    long_words = a["horizon"] == "LONG" and not (a["direction"] == "DISTRIBUTION"
-                                                 and a.get("scope") in ("sector", "macro"))
-    read = (READ_LONG if long_words else READ).get(a["direction"], a["direction"].lower())
-    scope = SCOPE.get(a.get("scope"))
     out.append(("Call", f"{a.get('call') or call(a)}."))
-    out.append(("Read", read[0].upper() + read[1:] + (f", driven by {scope}" if scope else "")
-                + f" ({a['confidence']} confidence)."))
+    if not a.get("no_news"):   # no read to report: the Why line already says so
+        long_words = a["horizon"] == "LONG" and not (a["direction"] == "DISTRIBUTION"
+                                                     and a.get("scope") in ("sector", "macro"))
+        read = (READ_LONG if long_words else READ).get(a["direction"], a["direction"].lower())
+        scope = SCOPE.get(a.get("scope"))
+        out.append(("Read", read[0].upper() + read[1:] + (f", driven by {scope}" if scope else "")
+                    + f" ({a['confidence']} confidence)."))
     if risk_text(a):
         out.append(("Risk", risk_text(a)))
     return out
@@ -360,9 +386,9 @@ def all_links(a: dict) -> list[str]:
 
 
 def format_alert(a: dict) -> str:
-    lines = [f"{title(a)} · {HORIZON.get(a['horizon'], a['horizon'])}"]
+    lines = [f"{title(a)} · {horizon_label(a)}"]
     lines += [f"{k}: {v}" for k, v in sections(a)]
-    lines.append("Sources: " + "  ".join(all_links(a)))
+    lines.append("Sources: " + ("  ".join(all_links(a)) or "none found"))
     return "\n".join(lines)
 
 
@@ -395,9 +421,9 @@ def format_alert_html(a: dict) -> str:
     links = " &middot; ".join(
         f'<a href="{html.escape(u, quote=True)}" style="color:#1d4ed8">{html.escape(_domain(u))}</a>'
         for u in all_links(a) if u.startswith(("https://", "http://")))
-    rows.append(f'<p {_P}><b>Sources:</b> {links}</p>')
+    rows.append(f'<p {_P}><b>Sources:</b> {links or "none found"}</p>')
     head = (f'<div style="font-size:16px;margin:0 0 4px"><b>{html.escape(title(a))}</b>'
-            f'<span style="color:#6b7280"> &middot; {html.escape(HORIZON.get(a["horizon"], a["horizon"]))}</span></div>')
+            f'<span style="color:#6b7280"> &middot; {html.escape(horizon_label(a))}</span></div>')
     return f'<div style="margin:0 0 18px">{head}{"".join(rows)}</div>'
 
 
