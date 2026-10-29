@@ -1,0 +1,252 @@
+<!doctype html>
+<!-- The README hero animation: one stock's path from scan to graded call.
+     Rendered frame by frame by docs/anim/render.js into docs/img/desk.gif.
+     All text lives in CONTENT below. While CONTENT.draft is true it is sample text
+     and the frame says so; the published GIF uses an alert from a recorded session. -->
+<html><head><meta charset="utf-8">
+<style>
+  :root { --bg0:#0b1220; --bg1:#16213b; --card:#13203a; --line:#2a3b5c; --text:#e6edf7; --muted:#8b9bb4;
+          --soft:#c7d2e3; --indigo:#818cf8; --indigo2:#a5b4fc; --teal:#5eead4; --teal2:#14b8a6;
+          --pink:#f472b6; --amber:#fbbf24; }
+  * { box-sizing:border-box; margin:0; }
+  html, body { width:1200px; height:640px; overflow:hidden; background:var(--bg0); }
+  body { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--text);
+         background:linear-gradient(135deg,var(--bg0),var(--bg1)); position:relative; }
+  .abs { position:absolute; }
+  .card { position:absolute; background:var(--card); border:1.5px solid var(--line); border-radius:14px;
+          padding:14px; transition:none; }
+  .hd { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .ic { width:32px; height:32px; border-radius:9px; display:grid; place-items:center; background:#1c2b4a; flex:none; }
+  .ttl { font-size:15.5px; font-weight:700; letter-spacing:-.2px; }
+  .sub { font-size:11.5px; color:var(--muted); margin-top:1px; }
+  .grid { display:grid; grid-template-columns:repeat(5,1fr); gap:3px; }
+  .cell { height:26px; border-radius:5px; background:#17264a; font-size:10px; font-weight:600; color:#7f8fab;
+          display:grid; place-items:center; letter-spacing:.2px; }
+  .lbl { font-size:11px; font-weight:700; letter-spacing:1.2px; color:var(--muted); text-transform:uppercase; margin:6px 0 6px; }
+  .txt { font-size:13.5px; line-height:1.45; color:var(--soft); }
+  .chip { display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px;
+          background:#132a26; border:1px solid var(--teal2); color:#99f6e4; }
+  .vote { position:absolute; right:14px; bottom:12px; font-size:13px; font-weight:800; letter-spacing:.6px;
+          padding:5px 12px; border-radius:8px; }
+  .stamp { font-size:21px; font-weight:800; line-height:1.15; text-align:center; color:var(--teal);
+           border:2.5px solid var(--teal); border-radius:12px; padding:12px 8px; margin-top:16px; }
+  .mail { border-radius:10px; padding:9px 11px; margin-bottom:8px; background:#17264a; }
+  .mfrom { font-size:11px; color:var(--muted); display:flex; justify-content:space-between; }
+  .msub { font-size:12.5px; font-weight:600; color:var(--soft); margin-top:2px; line-height:1.3; }
+  .mprev { font-size:11px; color:var(--muted); margin-top:3px; line-height:1.35; }
+  #ticket { font-size:13px; font-weight:800; padding:6px 12px; border-radius:999px; background:var(--indigo);
+            color:#0b1220; white-space:nowrap; box-shadow:0 0 0 4px rgba(129,140,248,.25), 0 6px 22px rgba(129,140,248,.45); }
+  #caption { left:0; width:1200px; top:566px; text-align:center; font-size:22px; font-weight:650; letter-spacing:-.2px; }
+  #tag { right:24px; top:24px; font-size:11px; font-weight:700; letter-spacing:1px; color:var(--amber);
+         border:1px solid var(--amber); border-radius:6px; padding:3px 8px; }
+</style></head>
+<body>
+<script>
+// ------------------------------------------------------------------ content
+// Sample text until the recorded session's real alert is filled in (then draft: false).
+const CONTENT = {
+  draft: true,                       // shows a "DRAFT · SAMPLE DATA" tag until real data is in
+  ticker: "NVDA", move: "+6.0%",
+  rule: "Gapped up and broke its 20-day high, on 20.9x normal volume",
+  headline: "Nvidia climbs as a hyperscaler raises its AI capex plan",
+  source: "reuters.com", read: "Buying · high confidence",
+  chartist: ["Support $72.17", "Resistance $78.40", "Trend up, RSI 64"], chartistVote: "ADD",
+  strategist: "Fits the tape, but breadth is narrow: a few leaders carry the index.", strategistVote: "WATCH",
+  call: "Watch, don't chase",
+  subject: "NVDA up 6.0%: opened 5.0% above yesterday's close",
+  preview: "Why: Nvidia climbs as a hyperscaler raises its AI capex plan. Call: Watch, don't chase.",
+  older: [["AI Market Desk", "Opening digest · 6 names", "10:06"], ["AI Market Desk", "AVGO down 3.1%: fell below its 20-day low", "Yesterday"]],
+  grid: "AAPL MSFT NVDA AMZN META GOOGL AVGO TSLA BRK-B UNH HD PG WMT COST NFLX ABBV BAC KO ORCL CVX MRK AMD PEP TMO ADBE LIN CSCO MCD ACN ABT WFC DIS INTU CAT GE IBM QCOM TXN VZ AMGN PFE UBER ISRG GS SPGI BKNG LOW HON PLTR MU ANET DE SBUX ADP PANW".split(" "),
+};
+const CAPTIONS = [   // [start second, text]
+  [0.0, "Plain rules scan all 500 names every 15 minutes. No AI, no cost."],
+  [1.6, "A rule fires. The Tape Reader finds out why, with a source."],
+  [3.6, "Two lenses vote, and they are allowed to disagree."],
+  [5.4, "Fixed rules make the Call, not a model's mood."],
+  [6.6, "It lands in your inbox, in plain words."],
+  [7.9, "Then the desk grades its own call against the market."],
+];
+const DURATION = 10.0;
+
+// ------------------------------------------------------------------ icons (inline SVG, no emoji fonts)
+const I = {
+  scan: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+  news: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h10M7 17h6"/></svg>',
+  chart: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 6-8 3 3"/></svg>',
+  globe: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>',
+  gavel: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linecap="round"><path d="M14 4l6 6M11 7l6 6M12.5 5.5l-5 5M4 20l7-7"/></svg>',
+  mail: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+};
+const hd = (icon, t, s) => `<div class="hd"><div class="ic">${I[icon]}</div><div><div class="ttl">${t}</div><div class="sub">${s}</div></div></div>`;
+
+// ------------------------------------------------------------------ layout
+const C = {  // card boxes: x, y, w, h
+  scan: [24, 76, 214, 400], tape: [262, 126, 214, 300], chart: [500, 76, 214, 190],
+  strat: [500, 286, 214, 190], call: [738, 166, 190, 220], inbox: [952, 76, 224, 400],
+};
+document.body.innerHTML = `
+  <div class="abs" style="left:28px;top:22px;font-size:21px;font-weight:800;letter-spacing:-.3px">AI Market Desk
+    <span style="font-weight:500;color:var(--muted);font-size:15px;margin-left:10px">how one move becomes a decision</span></div>
+  <div id="tag" class="abs">DRAFT · SAMPLE DATA</div>
+  <svg id="wires" class="abs" style="left:0;top:0" width="1200" height="640"></svg>
+  <div id="scan" class="card">${hd("scan", "Scanner", "S&amp;P 500 · rules only · $0")}<div class="grid" id="grid"></div></div>
+  <div id="tape" class="card">${hd("news", "Tape Reader", "why is it moving, right now?")}
+    <div class="lbl">Catalyst</div><div class="txt" id="headline" style="min-height:62px"></div>
+    <div id="src" style="margin-top:8px"><span class="chip">source · ${CONTENT.source}</span></div>
+    <div id="read" class="txt" style="margin-top:10px;font-weight:700;color:var(--teal)">${CONTENT.read}</div></div>
+  <div id="chart" class="card">${hd("chart", "Chartist lens", "levels · trend · exhaustion")}
+    <div class="txt" id="chartTxt">${CONTENT.chartist.map(l => `<div class="cl">${l}</div>`).join("")}</div>
+    <div class="vote" id="cv">${CONTENT.chartistVote}</div></div>
+  <div id="strat" class="card">${hd("globe", "Strategist lens", "liquidity · sentiment · breadth")}
+    <div class="txt" id="stratTxt" style="padding-right:4px"></div>
+    <div class="vote" id="sv">${CONTENT.strategistVote}</div></div>
+  <div id="call" class="card">${hd("gavel", "The Call", "fixed rules, not a model")}
+    <div class="stamp" id="stamp">${CONTENT.call}</div>
+    <div class="sub" id="callNote" style="text-align:center;margin-top:12px">same facts, same call</div></div>
+  <div id="inbox" class="card">${hd("mail", "Your inbox", "plain words, with sources")}<div id="mails"></div></div>
+  <div id="grade" class="card" style="left:24px;top:494px;width:1152px;height:54px;padding:0 18px;display:flex;align-items:center;gap:18px">
+    <div class="ttl" style="font-size:14.5px;white-space:nowrap">Scorecard</div>
+    <div class="sub" style="font-size:12.5px;white-space:nowrap">every call is graded against the market</div>
+    <div id="track" style="flex:1;position:relative;height:30px"></div></div>
+  <div id="ticket" class="abs">${CONTENT.ticker} ${CONTENT.move}</div>
+  <div id="caption" class="abs"></div>
+  <div class="abs" style="left:0;top:628px;width:1200px;height:3px;background:#1c2b4a"><div id="bar" style="height:3px;background:var(--indigo)"></div></div>`;
+
+for (const [id, [x, y, w, h]] of Object.entries(C)) Object.assign(document.getElementById(id).style, {left:x+"px", top:y+"px", width:w+"px", height:h+"px"});
+document.getElementById("tag").style.display = CONTENT.draft ? "" : "none";
+const grid = document.getElementById("grid");
+CONTENT.grid.slice(0, 55).forEach(t => { const d = document.createElement("div"); d.className = "cell"; d.textContent = t; grid.appendChild(d); });
+const cells = [...grid.children];
+const hit = cells.find(c => c.textContent === CONTENT.ticker);
+
+// mails: the new one on top, older ones below
+document.getElementById("mails").innerHTML =
+  `<div class="mail" id="newMail" style="border:1.5px solid var(--indigo)"><div class="mfrom"><span>AI Market Desk</span><span>now</span></div>
+     <div class="msub">${CONTENT.subject}</div><div class="mprev">${CONTENT.preview}</div></div>` +
+  CONTENT.older.map(([f, s, w]) => `<div class="mail old"><div class="mfrom"><span>${f}</span><span>${w}</span></div><div class="msub" style="color:#8b9bb4">${s}</div></div>`).join("");
+
+// scorecard track: today, +5 days, +20 days
+const track = document.getElementById("track");
+const marks = [["today", 0], ["5 days", .45], ["20 days", 1]];
+track.innerHTML = `<div style="position:absolute;left:0;right:0;top:14px;height:2px;background:#2a3b5c"></div>
+  <div id="trackFill" style="position:absolute;left:0;top:14px;height:2px;background:var(--teal)"></div>` +
+  marks.map(([l, p], i) => `<div style="position:absolute;left:calc(${p*100}% - 11px);top:4px;text-align:center;z-index:2">
+     <div class="dot" id="dot${i}" style="width:22px;height:22px;border-radius:50%;background:#1c2b4a;border:2px solid #2a3b5c;display:grid;place-items:center"></div></div>
+     <div style="position:absolute;left:calc(${p*100}% + ${i === 2 ? -74 : 16}px);top:6px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);padding:0 6px">${l}</div>`).join("");
+
+// wires between cards
+const W = [ // id, from [x,y], to [x,y], lights at second
+  ["w1", [238, 276], [262, 276], 1.6], ["w2a", [476, 276], [500, 171], 3.6], ["w2b", [476, 276], [500, 381], 3.6],
+  ["w3a", [714, 171], [738, 276], 5.4], ["w3b", [714, 381], [738, 276], 5.4], ["w4", [928, 276], [952, 276], 6.6],
+];
+document.getElementById("wires").innerHTML = `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#818cf8"/></marker>
+  <marker id="ad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2a3b5c"/></marker></defs>` +
+  W.map(([id, [x1, y1], [x2, y2]]) => `<path id="${id}" d="M${x1} ${y1} C${(x1+x2)/2} ${y1} ${(x1+x2)/2} ${y2} ${x2-2} ${y2}" fill="none" stroke-width="2.2"/>`).join("");
+
+// ------------------------------------------------------------------ timeline
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const ease = p => p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2) / 2;
+const pop = p => p <= 0 ? 0 : 1 + 0.35 * Math.sin(Math.PI * Math.min(p, 1)) * (1 - Math.min(p, 1)) * 2;   // overshoot then settle
+const lerp = (a, b, p) => a + (b - a) * p;
+const rnd = (i, k) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x); };
+
+function activate(id, on, color = "#818cf8") {
+  const el = document.getElementById(id);
+  el.style.opacity = on ? 1 : .5;
+  el.style.borderColor = on ? color : "var(--line)";
+  el.style.boxShadow = on ? `0 0 0 3px ${color}22, 0 10px 30px ${color}22` : "none";
+}
+function cellCenter(c) {   // page coords of a grid cell
+  const r = c.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2];
+}
+const STOPS = () => [cellCenter(hit), [369, 112], [607, 276], [833, 152], [1064, 62]];   // ticket waypoints (centre)
+const TRAVEL = [[1.6, 2.1], [3.6, 3.95], [5.4, 5.75], [6.6, 6.95]];
+
+window.render = function (t) {
+  t = ((t % DURATION) + DURATION) % DURATION;
+  // caption + progress
+  const cap = [...CAPTIONS].reverse().find(([s]) => t >= s);
+  const capEl = document.getElementById("caption");
+  capEl.textContent = cap[1];
+  capEl.style.opacity = clamp(seg(t, cap[0], cap[0] + .25) * (t > DURATION - .35 ? seg(DURATION - t, 0, .35) : 1));
+  document.getElementById("bar").style.width = (t / DURATION * 100) + "%";
+
+  // 1 · scanner: cells flicker, then one lights up
+  activate("scan", t < 2.2 || t > 9.6, "#818cf8");
+  cells.forEach((c, i) => {
+    if (c === hit) return;
+    const k = Math.floor(t * 6), r = rnd(i, k);
+    const live = t < 1.4 && r > .78;
+    c.style.background = live ? (rnd(i, k + 99) > .5 ? "#123a33" : "#3a1730") : "#17264a";
+    c.style.color = live ? (rnd(i, k + 99) > .5 ? "#5eead4" : "#f472b6") : "#7f8fab";
+  });
+  const h = seg(t, 1.0, 1.5);
+  hit.style.background = h > 0 ? "#818cf8" : "#17264a";
+  hit.style.color = h > 0 ? "#0b1220" : "#7f8fab";
+  hit.style.transform = `scale(${h > 0 ? pop(h) : 1})`;
+  hit.style.boxShadow = h > 0 ? "0 0 0 3px rgba(129,140,248,.35)" : "none";
+
+  // ticket: appears on the hit cell, then hops card to card
+  const tk = document.getElementById("ticket"), stops = STOPS();
+  let pos = stops[0], vis = seg(t, 1.25, 1.5);
+  TRAVEL.forEach(([a, b], i) => { if (t >= a) pos = [lerp(stops[i][0], stops[i + 1][0], ease(seg(t, a, b))), lerp(stops[i][1], stops[i + 1][1], ease(seg(t, a, b)))]; });
+  if (t > 7.3) vis = 1 - seg(t, 7.3, 7.6);
+  tk.style.opacity = vis;
+  tk.style.left = (pos[0] - tk.offsetWidth / 2) + "px";
+  tk.style.top = (pos[1] - tk.offsetHeight / 2) + "px";
+
+  // wires light up as the ticket passes
+  W.forEach(([id, , , at]) => {
+    const on = t >= at, el = document.getElementById(id);
+    el.setAttribute("stroke", on ? "#818cf8" : "#2a3b5c");
+    el.setAttribute("marker-end", on ? "url(#ah)" : "url(#ad)");
+    el.setAttribute("stroke-dasharray", on ? "" : "4 5");
+  });
+
+  // 2 · Tape Reader: types the headline, then the source and the read
+  activate("tape", t >= 2.0 && t < 9.6, "#818cf8");
+  const n = Math.round(CONTENT.headline.length * seg(t, 2.1, 3.0));
+  document.getElementById("headline").innerHTML = t < 2.1 ? '<span style="color:#56688a">waiting for a hit…</span>'
+      : CONTENT.headline.slice(0, n) + (n < CONTENT.headline.length ? '<span style="color:var(--indigo)">▍</span>' : "");
+  document.getElementById("src").style.opacity = seg(t, 3.0, 3.2);
+  document.getElementById("read").style.opacity = seg(t, 3.2, 3.4);
+
+  // 3 · lenses: fill in, then vote
+  activate("chart", t >= 3.9 && t < 9.6, "#818cf8");
+  activate("strat", t >= 4.3 && t < 9.6, "#818cf8");
+  [...document.querySelectorAll("#chartTxt .cl")].forEach((el, i) => el.style.opacity = seg(t, 4.0 + i * .2, 4.2 + i * .2));
+  const sn = Math.round(CONTENT.strategist.length * seg(t, 4.4, 5.0));
+  document.getElementById("stratTxt").textContent = CONTENT.strategist.slice(0, sn);
+  const vote = (id, at, bg, fg) => { const el = document.getElementById(id), p = seg(t, at, at + .3);
+    el.style.opacity = p; el.style.transform = `scale(${pop(p)})`; el.style.background = bg; el.style.color = fg; };
+  vote("cv", 4.7, "#132a26", "#5eead4");
+  vote("sv", 5.1, "#2a2410", "#fbbf24");
+
+  // 4 · the Call stamps
+  activate("call", t >= 5.7 && t < 9.6, "#5eead4");
+  const sp = seg(t, 5.8, 6.1), st = document.getElementById("stamp");
+  st.style.opacity = sp; st.style.transform = `scale(${sp > 0 ? lerp(1.5, 1, ease(sp)) : 1.5}) rotate(${lerp(-6, 0, ease(sp))}deg)`;
+  document.getElementById("callNote").style.opacity = seg(t, 6.2, 6.4);
+
+  // 5 · inbox: the new email slides in on top
+  activate("inbox", t >= 6.9 && t < 9.6, "#818cf8");
+  const mp = ease(seg(t, 6.9, 7.4)), nm = document.getElementById("newMail");
+  nm.style.opacity = mp; nm.style.transform = `translateY(${lerp(-18, 0, mp)}px)`;
+  nm.style.marginBottom = mp > 0 ? "8px" : "-120px";   // older mails sit at the top until it arrives
+  document.querySelectorAll(".mail.old").forEach(el => el.style.transform = `translateY(${lerp(0, 0, mp)}px)`);
+
+  // 6 · scorecard: today, 5 days, 20 days
+  activate("grade", t >= 7.9 && t < 9.6, "#5eead4");
+  const tf = seg(t, 8.0, 9.0);
+  document.getElementById("trackFill").style.width = (tf * 100) + "%";
+  marks.forEach(([, p], i) => { const d = document.getElementById("dot" + i), on = tf >= p - 1e-6 && t >= 8.0;
+    d.style.background = on ? "#5eead4" : "#1c2b4a"; d.style.borderColor = on ? "#5eead4" : "#2a3b5c";
+    const q = seg(t, 8.0 + p, 8.15 + p);   // each dot pops as the line reaches it
+    d.innerHTML = on ? I.check : ""; d.style.transform = `scale(${on && q > 0 && q < 1 ? pop(q) : 1})`; });
+};
+window.DURATION = DURATION;
+render(0);
+</script>
+</body></html>
