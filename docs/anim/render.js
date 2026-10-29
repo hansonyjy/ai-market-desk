@@ -13,6 +13,7 @@ const frames = fs.mkdtempSync(path.join(os.tmpdir(), "desk-frames-"));
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1200, height: 640 }, deviceScaleFactor: 1 });
   await page.goto("file://" + path.join(__dirname, "desk.html"));
+  await page.setViewportSize({ width: 1200, height: await page.evaluate(() => window.HEIGHT || 640) });
   await page.evaluate(() => document.fonts.ready);
   const duration = await page.evaluate(() => window.DURATION);
   const n = Math.round(duration * FPS);

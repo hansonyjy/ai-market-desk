@@ -1,4 +1,5 @@
-<p align="center"><img src="docs/img/banner.svg" alt="AI Market Desk: a multi-agent AI market desk" width="100%"></p>
+<p align="center"><img src="docs/img/desk.gif" alt="AI Market Desk: six AI agents, one rules engine, graded daily. One real alert, start to finish: the scanner flags AMZN, the Tape Reader finds why, two lenses disagree, the Call says watch, do not chase, the email lands, and five days later the Scorecard grades it" width="100%"></p>
+<p align="center"><sub>A real alert from Oct 19, 2026, text shortened to fit. Rebuilt from <a href="docs/anim/desk.html"><code>docs/anim/desk.html</code></a> by <code>node docs/anim/render.js</code>.</sub></p>
 
 <p align="center">
   <a href="../../actions/workflows/ci.yml"><img src="../../actions/workflows/ci.yml/badge.svg" alt="CI"></a>
@@ -13,9 +14,6 @@
 Every 15 minutes it scans the S&P 500, or your own portfolio and watchlist, and stays quiet until a move has a reason. Then it emails you: what moved, why (with sources), where support and resistance are, how a chartist and a macro strategist would each read it, and one plain call: *watch, don't chase, consider adding, consider trimming*. Set your own entry and trim levels and it watches those too. Then it grades every call it made against the market.
 
 I designed and built it end to end, as a product and as a system: what an investor needs to see in a 30-second email, the rules engine and six AI agents behind it, and the scorecard that keeps it honest. I build with Claude Code as a pair programmer, and the history shows how: small changes, each with its reason and its tests.
-
-<p align="center"><img src="docs/img/desk.gif" alt="One real alert, start to finish: the scanner flags AMZN, the Tape Reader finds why, two lenses disagree, the Call says watch, do not chase, the email lands, and five days later the Scorecard grades it" width="100%"></p>
-<p align="center"><sub>A real alert from Oct 19, 2026, text shortened to fit. Rebuilt from <a href="docs/anim/desk.html"><code>docs/anim/desk.html</code></a> by <code>node docs/anim/render.js</code>.</sub></p>
 
 ## What lands in your inbox
 

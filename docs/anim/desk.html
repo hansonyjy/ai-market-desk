@@ -9,7 +9,7 @@
           --soft:#c7d2e3; --indigo:#818cf8; --indigo2:#a5b4fc; --teal:#5eead4; --teal2:#14b8a6;
           --pink:#f472b6; --amber:#fbbf24; }
   * { box-sizing:border-box; margin:0; }
-  html, body { width:1200px; height:640px; overflow:hidden; background:var(--bg0); }
+  html, body { width:1200px; height:815px; overflow:hidden; background:var(--bg0); }
   body { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--text);
          background:linear-gradient(135deg,var(--bg0),var(--bg1)); position:relative; }
   .abs { position:absolute; }
@@ -36,8 +36,8 @@
   .mprev { font-size:11px; color:var(--muted); margin-top:3px; line-height:1.35; }
   #ticket { font-size:13px; font-weight:800; padding:6px 12px; border-radius:999px; background:var(--indigo);
             color:#0b1220; white-space:nowrap; box-shadow:0 0 0 4px rgba(129,140,248,.25), 0 6px 22px rgba(129,140,248,.45); }
-  #caption { left:0; width:1200px; top:566px; text-align:center; font-size:22px; font-weight:650; letter-spacing:-.2px; }
-  #tag { right:24px; top:24px; font-size:11px; font-weight:700; letter-spacing:1px; color:var(--amber);
+  #caption { left:0; width:1200px; top:562px; text-align:center; font-size:22px; font-weight:650; letter-spacing:-.2px; }
+  #tag { left:58px; top:200px; font-size:11px; font-weight:700; letter-spacing:1px; color:var(--amber);
          border:1px solid var(--amber); border-radius:6px; padding:3px 8px; }
 </style></head>
 <body>
@@ -87,10 +87,24 @@ const C = {  // card boxes: x, y, w, h
   scan: [24, 76, 214, 400], tape: [262, 126, 214, 300], chart: [500, 76, 214, 190],
   strat: [500, 286, 214, 190], call: [738, 166, 190, 220], inbox: [952, 76, 224, 400],
 };
+const STAGE_TOP = 175;   // the banner above, the desk below
 document.body.innerHTML = `
-  <div class="abs" style="left:28px;top:22px;font-size:21px;font-weight:800;letter-spacing:-.3px">AI Market Desk
-    <span style="font-weight:500;color:var(--muted);font-size:15px;margin-left:10px">how one move becomes a decision</span></div>
+  <svg class="abs" style="left:0;top:0" width="1200" height="235" viewBox="0 40 1200 235">
+    <defs><linearGradient id="pl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f46e5" stop-opacity="0"/>
+      <stop offset=".35" stop-color="#818cf8"/><stop offset="1" stop-color="#5eead4"/></linearGradient></defs>
+    <path d="M600 230 L640 222 L680 226 L720 205 L760 214 L800 188 L840 196 L880 160 L920 172 L960 138 L1000 150 L1040 112 L1080 124 L1120 92 L1160 100" fill="none" stroke="url(#pl)" stroke-width="3"/>
+    <circle cx="880" cy="160" r="6" fill="#5eead4"/><circle cx="1040" cy="112" r="6" fill="#5eead4"/><circle cx="760" cy="214" r="6" fill="#f472b6"/>
+    <rect x="965" y="64" width="150" height="26" rx="13" fill="#132a26" stroke="#14b8a6"/>
+    <text x="978" y="82" fill="#99f6e4" font-size="13" font-weight="600">breakout · sourced</text>
+    <rect x="640" y="238" width="170" height="26" rx="13" fill="#2a1630" stroke="#db2777"/>
+    <text x="653" y="256" fill="#fbcfe8" font-size="13" font-weight="600">gap down · thesis intact</text>
+    <text x="56" y="112" fill="#e6edf7" font-size="54" font-weight="800" letter-spacing="-1">AI Market Desk</text>
+    <text x="58" y="156" fill="#a5b4fc" font-size="22" font-weight="600">Six AI agents. One rules engine. Graded daily.</text>
+    <text x="58" y="198" fill="#8b9bb4" font-size="17">Watches the S&amp;P 500. Explains every move with sources.</text>
+    <text x="58" y="224" fill="#8b9bb4" font-size="17">Argues three views. Grades itself against the market.</text>
+  </svg>
   <div id="tag" class="abs"></div>
+  <div id="stage" class="abs" style="left:0;top:${STAGE_TOP}px;width:1200px;height:640px">
   <svg id="wires" class="abs" style="left:0;top:0" width="1200" height="640"></svg>
   <div id="scan" class="card">${hd("scan", "Scanner", "S&amp;P 500 · rules only · $0")}<div class="grid" id="grid"></div></div>
   <div id="tape" class="card">${hd("news", "Tape Reader", "why is it moving, right now?")}
@@ -113,7 +127,8 @@ document.body.innerHTML = `
     <div id="track" style="flex:1;position:relative;height:30px"></div></div>
   <div id="ticket" class="abs">${CONTENT.ticker} ${CONTENT.move}</div>
   <div id="caption" class="abs"></div>
-  <div class="abs" style="left:0;top:628px;width:1200px;height:3px;background:#1c2b4a"><div id="bar" style="height:3px;background:var(--indigo)"></div></div>`;
+  <div class="abs" style="left:0;top:628px;width:1200px;height:3px;background:#1c2b4a"><div id="bar" style="height:3px;background:var(--indigo)"></div></div>
+  </div>`;
 
 for (const [id, [x, y, w, h]] of Object.entries(C)) Object.assign(document.getElementById(id).style, {left:x+"px", top:y+"px", width:w+"px", height:h+"px"});
 const tagEl = document.getElementById("tag");
@@ -163,7 +178,7 @@ function activate(id, on, color = "#818cf8") {
   el.style.boxShadow = on ? `0 0 0 3px ${color}22, 0 10px 30px ${color}22` : "none";
 }
 function cellCenter(c) {   // page coords of a grid cell
-  const r = c.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2];
+  const r = c.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2 - STAGE_TOP];
 }
 const STOPS = () => [cellCenter(hit), [369, 112], [607, 276], [833, 152], [1064, 62]];   // ticket waypoints (centre)
 const TRAVEL = [[1.6, 2.1], [3.6, 3.95], [5.4, 5.75], [6.6, 6.95]];
@@ -257,7 +272,7 @@ window.render = function (t) {
     const q = seg(t, 8.0 + p * 1.2, 8.15 + p * 1.2);   // each dot pops as the line reaches it
     d.innerHTML = on ? I.check : ""; d.style.transform = `scale(${on && q > 0 && q < 1 ? pop(q) : 1})`; });
 };
-window.DURATION = DURATION;
+window.DURATION = DURATION; window.HEIGHT = 815;
 render(0);
 </script>
 </body></html>
