@@ -20,7 +20,7 @@
   <g>
     <rect x="40" y="145" width="250" height="150" rx="12" fill="#13203a" stroke="#2a3b5c"/>
     <text x="60" y="177" fill="#e6edf7" font-size="17" font-weight="700">Scanner</text>
-    <text x="60" y="200" fill="#8b9bb4" font-size="13">plain rules on the S&P 500</text>
+    <text x="60" y="200" fill="#8b9bb4" font-size="13">plain rules on the S&amp;P 500</text>
     <text x="60" y="226" fill="#c7d2e3" font-size="13">gaps · breakouts · volume spikes</text>
     <text x="60" y="246" fill="#c7d2e3" font-size="13">fast moves · 200-day pullbacks</text>
     <text x="60" y="266" fill="#c7d2e3" font-size="13">ranks hits · top 8 get read</text>
