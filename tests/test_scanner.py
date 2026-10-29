@@ -477,6 +477,8 @@ names = list(dict.fromkeys(f.ticker for f in kept))
 assert names == ["TSLA", "ZZZ", "XXX", "YYY"], names                          # VIP first, then strongest 3
 assert len([f for f in kept if f.ticker == "XXX"]) == 2                       # a kept name keeps all its hits
 assert all("triage_cut" in f.tags for f in weak) and not big.tags            # cut hits are tagged for the log
+own = F("AAA", "LONG", "target_entry_hit", "x", 10, 0.8, -0.5, "2026-10-29")   # the user's own level, weak score
+assert "AAA" in {f.ticker for f in s.triage(weak + [big, setup, own], limit=1)}   # never cut
 assert s.triage(weak[:2], limit=3) == weak[:2]                                # under the limit: nothing cut
 assert len(s.triage(weak, limit=0)) == 10                                     # 0 turns triage off
 print("triage ok")

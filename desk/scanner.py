@@ -908,16 +908,21 @@ def hit_score(fs: list[Flag]) -> float:
     return round(score, 2)
 
 
+# A level the user set in the Universe is their own instruction: never cut by triage.
+OWN_LEVEL_RULES = {"target_entry_hit", "trim_level_hit"}
+
+
 def triage(flags: list[Flag], limit: Optional[int] = None) -> list[Flag]:
     """Keep the hits of the `limit` highest-scoring names, strongest first. VIP
-    hits are always kept. Cut hits stay in the Signal Log, tagged triage_cut."""
+    hits and hits on the user's own entry or trim levels are always kept, ahead
+    of the rest. Cut hits stay in the Signal Log, tagged triage_cut."""
     limit = CFG["MAX_READS_PER_SCAN"] if limit is None else limit
     by: dict[str, list[Flag]] = {}
     for f in flags:
         by.setdefault(f.ticker, []).append(f)
     score = {t: hit_score(fs) for t, fs in by.items()}
     ranked = sorted(by, key=lambda t: (-score[t], t))
-    vip = [t for t in ranked if any(f.horizon == "VIP" for f in by[t])]
+    vip = [t for t in ranked if any(f.horizon == "VIP" or f.rule in OWN_LEVEL_RULES for f in by[t])]
     rest = [t for t in ranked if t not in vip]
     if limit <= 0 or len(rest) <= limit:
         return [f for t in vip + rest for f in by[t]]
