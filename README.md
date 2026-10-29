@@ -20,7 +20,7 @@ I designed and built it end to end, as a product and as a system: what an invest
 
 - **The opening digest, at 10:00.** The open's gaps and breakouts, each with its catalyst, grouped by theme, under one line on the market backdrop.
 - **Live alerts.** A name breaks out, gaps or moves fast on volume, and the news explains why. Capped per day, so it never floods you.
-- **Your levels.** A holding reaches your trim level, or a watchlist name reaches your entry, with the news that moved it there.
+- **Your levels.** A holding reaches your trim level, or a watchlist name reaches your entry: always emailed, with the news that moved it there, or *No news found*.
 - **VIP breaking news.** For the few names you follow most closely: material headlines every 15 minutes, with opinion pieces and recycled stories filtered out.
 - **Answers.** Reply to any alert ("where is support if this keeps falling?") and the right specialist answers in the same thread.
 
@@ -41,11 +41,11 @@ COST,Costco,Watch,Normal,850,,Staples
 | --- | --- |
 | **Status** | `Holding` or `Watch`. Only a holding can ever get *consider trimming*. |
 | **Priority** | `VIP` adds the 15-minute breaking-news check. Keywords per name live in [`vip_config.json`](desk/config/vip_config.json). |
-| **Target entry level** | At or below it, the desk reads why the price got there. News that backs buying makes the Call *consider adding*. |
-| **Trim level** | At or above it, on a holding, the Call becomes *consider trimming*. |
+| **Target entry level** | At or below it, you get an email. A quiet drift to your price is *consider adding*. Bad news, or a sharp drop with no news found, holds the Call back from adding. |
+| **Trim level** | At or above it, on a holding, you get *consider trimming*. |
 | **Theme** | Groups your names in the opening digest. |
 
-A hit on your own level is never cut by triage: it always gets a read. Like every alert, it is emailed when a source explains the move; a price with no story is logged, not sent.
+Your levels are your instructions, so they skip the rules that keep other alerts quiet. They are never cut by triage, never stopped by a daily cap, and they are emailed even when no news explains the move. The email says *No news found* rather than guessing a reason.
 
 Point the desk at your list with `UNIVERSE_CSV=my_portfolio.csv` (a file, or the CSV link of a published Google Sheet), or set `SHEET_ID` (with a Google service account) to edit the list in a spreadsheet and keep the log there too. For a closer peer comparison, map a name to its sector ETF in [`benchmarks.json`](desk/config/benchmarks.json).
 
@@ -92,6 +92,7 @@ Each agent's instructions live in one file in [`charters/`](charters/). The code
 - **Email, not a dashboard.** Investors live in their inbox and won't open another app at 9:45. Every alert reads top to bottom in 30 seconds: what moved, why, the levels, two views, the call.
 - **Four calls, in plain words.** No price targets and no scores to decode. *Watch* · *Watch, don't chase* · *Consider adding* · *Consider trimming*. The words carry the market judgment: a breakout on news is a reason to watch, not to chase.
 - **Silence is a feature.** Daily caps for each kind of email, one opening digest instead of ten pings at the open, and triage. An alert that arrives rarely is an alert that gets read.
+- **Your instructions beat the desk's rules.** "No source, no claim" keeps the desk from inventing reasons, but a level you set is the news. It is always emailed, and when nothing explains the move the email says so instead of staying silent.
 - **Never trim on a bad day alone.** A sector-wide or market-wide selloff is not a reason to sell a holding. Only company-specific news with high confidence, or your own trim level, can lead to *consider trimming*.
 - **Two views, clearly labeled.** Price-led and macro-led investors read the same move differently. Showing both, marked as simulated, is more useful than one blended opinion.
 - **Trust is earned by grading.** The desk scores its own calls at 5 and 20 days, so you can see whether it is worth listening to.
