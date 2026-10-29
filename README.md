@@ -8,20 +8,46 @@
   <img src="https://img.shields.io/badge/runs%20for-~%241%2Fday-5eead4" alt="about $1 a day">
 </p>
 
-**AI Market Desk** watches the S&P 500 every 15 minutes. When a stock moves for a reason, it emails you: what happened, why (with sources), where the levels are, how two very different strategists would read it, and a plain call: *watch, don't chase, consider adding, consider trimming*. Then it grades every one of those calls against the market.
+**You can't watch 500 stocks at once. AI Market Desk can.**
 
-I designed and built it end to end: the rules engine, six AI agents, the email layer, a backtesting lab, a scorecard and a daily self-check. I build with Claude Code as a pair programmer, and the history shows how: small changes, each with its reason and its tests.
+Every 15 minutes it scans the S&P 500, or your own portfolio and watchlist, and stays quiet until a move has a reason. Then it emails you: what moved, why (with sources), where support and resistance are, how a chartist and a macro strategist would each read it, and one plain call: *watch, don't chase, consider adding, consider trimming*. Set your own entry and trim levels and it watches those too. Then it grades every call it made against the market.
+
+I designed and built it end to end, as a product and as a system: what an investor needs to see in a 30-second email, the rules engine and six AI agents behind it, and the scorecard that keeps it honest. I build with Claude Code as a pair programmer, and the history shows how: small changes, each with its reason and its tests.
 
 <!-- HERO: screenshot of a real alert email (docs/img/alert.png) -->
 
-## What it does, in 30 seconds
+## What lands in your inbox
 
-- **Free until something happens.** Plain rules scan all 500 names every 15 minutes (gaps, breakouts, volume spikes, fast moves, 200-day pullbacks). No AI runs until a rule fires.
-- **Only the strongest hits get read.** On 500 names a busy open can fire dozens of rules. Each scan ranks its hits by volume, size of move and setup, and only the top 8 go to the agents. The rest still go in the Signal Log, tagged `triage_cut`.
-- **Explains the move, or says it can't.** A *Tape Reader* agent finds the catalyst in today's news, with links. No source, no claim.
-- **Two lenses that are allowed to disagree.** A *Chartist* (levels, trend, DeMark exhaustion, leadership) and a *Strategist* (liquidity, sentiment, breadth) each vote *add / trim / watch*. A fixed rule set, not a model, makes the final Call.
-- **You can talk back.** Reply to any alert with a question and the right specialist answers in the same thread.
-- **It grades itself.** Every hit, read, vote and email is logged and scored against the market at 5 and 20 days. A daily health check turns every past bug into a permanent test.
+- **The opening digest, at 10:00.** The open's gaps and breakouts, each with its catalyst, grouped by theme, under one line on the market backdrop.
+- **Live alerts.** A name breaks out, gaps or moves fast on volume, and the news explains why. Capped per day, so it never floods you.
+- **Your levels.** A holding reaches your trim level, or a watchlist name reaches your entry, with the news that moved it there.
+- **VIP breaking news.** For the few names you follow most closely: material headlines every 15 minutes, with opinion pieces and recycled stories filtered out.
+- **Answers.** Reply to any alert ("where is support if this keeps falling?") and the right specialist answers in the same thread.
+
+## Make it yours
+
+The S&P 500 is only the default. The stock list is one CSV file, or one tab in a Google Sheet. Swap in what you own and what you are waiting to buy:
+
+```csv
+Ticker,Name,Status,Priority,Target entry level,Trim level,Theme
+NVDA,Nvidia,Holding,Normal,,250,AI chips
+TSLA,Tesla,Holding,VIP,,,EV / robotics
+COST,Costco,Watch,Normal,850,,Staples
+```
+
+*(The levels above are placeholders. Use your own.)*
+
+| Column | What it changes |
+| --- | --- |
+| **Status** | `Holding` or `Watch`. Only a holding can ever get *consider trimming*. |
+| **Priority** | `VIP` adds the 15-minute breaking-news check. Keywords per name live in [`vip_config.json`](desk/config/vip_config.json). |
+| **Target entry level** | At or below it, the desk reads why the price got there. News that backs buying makes the Call *consider adding*. |
+| **Trim level** | At or above it, on a holding, the Call becomes *consider trimming*. |
+| **Theme** | Groups your names in the opening digest. |
+
+A hit on your own level is never cut by triage: it always gets a read. Like every alert, it is emailed when a source explains the move; a price with no story is logged, not sent.
+
+Point the desk at your list with `UNIVERSE_CSV=my_portfolio.csv` (a file, or the CSV link of a published Google Sheet), or set `SHEET_ID` (with a Google service account) to edit the list in a spreadsheet and keep the log there too. For a closer peer comparison, map a name to its sector ETF in [`benchmarks.json`](desk/config/benchmarks.json).
 
 ## See it work, without keys
 
@@ -36,6 +62,12 @@ desk demo
 <!-- DEMO: terminal capture of `desk demo` (docs/img/demo.png) -->
 
 ## How it works
+
+- **Free until something happens.** Plain rules scan every name every 15 minutes: gaps, breakouts, volume spikes, fast moves, 200-day pullbacks, your levels. No AI runs until a rule fires.
+- **Only the strongest hits get read.** On 500 names a busy open can fire dozens of rules. Each scan ranks its hits by volume, size of move and setup, and only the top 8 go to the agents. The rest still go in the Signal Log, tagged `triage_cut`.
+- **Explains the move, or says it can't.** A *Tape Reader* agent finds the catalyst in today's news, with links. No source, no claim.
+- **Two lenses that are allowed to disagree.** A *Chartist* (levels, trend, DeMark exhaustion, leadership) and a *Strategist* (liquidity, sentiment, breadth) each vote *add / trim / watch*. A fixed rule set, not a model, makes the final Call.
+- **It grades itself.** Every hit, read, vote and email is logged and scored against the market at 5 and 20 days.
 
 <p align="center"><img src="docs/img/architecture.svg" alt="Architecture: scanner, Tape Reader, two lenses, the Call, email, Ask the desk, and the grading loop" width="100%"></p>
 
@@ -54,6 +86,15 @@ Each agent's instructions live in one file in [`charters/`](charters/). The code
 ## What the emails look like
 
 <!-- GALLERY: opening digest, VIP email, Ask the desk reply (docs/img/*.png) -->
+
+## Product decisions
+
+- **Email, not a dashboard.** Investors live in their inbox and won't open another app at 9:45. Every alert reads top to bottom in 30 seconds: what moved, why, the levels, two views, the call.
+- **Four calls, in plain words.** No price targets and no scores to decode. *Watch* · *Watch, don't chase* · *Consider adding* · *Consider trimming*. The words carry the market judgment: a breakout on news is a reason to watch, not to chase.
+- **Silence is a feature.** Daily caps for each kind of email, one opening digest instead of ten pings at the open, and triage. An alert that arrives rarely is an alert that gets read.
+- **Never trim on a bad day alone.** A sector-wide or market-wide selloff is not a reason to sell a holding. Only company-specific news with high confidence, or your own trim level, can lead to *consider trimming*.
+- **Two views, clearly labeled.** Price-led and macro-led investors read the same move differently. Showing both, marked as simulated, is more useful than one blended opinion.
+- **Trust is earned by grading.** The desk scores its own calls at 5 and 20 days, so you can see whether it is worth listening to.
 
 ## Design principles, and the incident behind each
 
