@@ -1,4 +1,5 @@
-// Renders docs/anim/desk.html to docs/img/desk.gif, frame by frame.
+// Renders docs/anim/desk.html to docs/img/desk.gif, frame by frame, plus
+// docs/img/social-preview.png, the still GitHub shows when the repo link is shared.
 // Run: node docs/anim/render.js   (needs Playwright with Chromium, and ffmpeg)
 const { chromium } = require("playwright");
 const { execFileSync } = require("child_process");
@@ -21,6 +22,19 @@ const frames = fs.mkdtempSync(path.join(os.tmpdir(), "desk-frames-"));
     await page.evaluate(t => window.render(t), i / FPS);
     await page.screenshot({ path: path.join(frames, `f${String(i).padStart(4, "0")}.png`) });
   }
+  // A still for GitHub's social preview (1280x640): the finished frame, centred.
+  const still = await browser.newPage({ viewport: { width: 1280, height: 640 }, deviceScaleFactor: 1 });
+  await still.goto("file://" + path.join(__dirname, "desk.html"));
+  await still.evaluate(() => document.fonts.ready);
+  await still.evaluate(() => {
+    render(DURATION - 0.6);
+    document.getElementById("bar").parentElement.style.display = "none";
+    const s = 640 / (window.HEIGHT || 640);
+    document.documentElement.style.cssText = "width:1280px;height:640px;background:linear-gradient(135deg,#0b1220,#16213b)";
+    Object.assign(document.body.style, { transform: `scale(${s})`, transformOrigin: "0 0", position: "absolute",
+                                         left: `${(1280 - 1200 * s) / 2}px`, top: "0px" });
+  });
+  await still.screenshot({ path: path.join(root, "docs", "img", "social-preview.png") });
   await browser.close();
   // One palette for the whole GIF keeps colours steady; no dithering keeps flat areas small.
   const pal = path.join(frames, "palette.png");
