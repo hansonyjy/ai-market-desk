@@ -665,31 +665,36 @@ def fetch_daily(tickers: list[str], period: str = "14mo", adjust: bool = False) 
     return out
 
 
-def earnings_dates(tickers: list[str], state: dict) -> dict[str, date]:
-    """Next earnings date per US ticker from Finnhub, cached once per day."""
+def earnings_dates(tickers: list[str], state: dict, get=None) -> dict[str, date]:
+    """Next earnings date per US ticker from Finnhub, cached once per day.
+    One calendar call per week of the window covers every company, so 500 names
+    cost 3 calls instead of 500 (one per name at 60/min would take over 9 minutes)."""
     key = env("FINNHUB_KEY")
     today = datetime.now(ET).date().isoformat()
     cache = state.get("earnings", {})
     if cache.get("date") == today:
         return {t: date.fromisoformat(d) for t, d in cache.get("map", {}).items()}
+    want = {t for t in tickers if "." not in t}   # Finnhub free tier: US symbols only
+    spell = {t.replace("-", "."): t for t in want}   # Finnhub writes BRK.B, Yahoo BRK-B
     out: dict[str, str] = {}
-    if key:
+    if key and want:
+        get = get or requests.get
         start = datetime.now(ET).date()
-        end = start + timedelta(days=21)
-        for t in tickers:
-            if "." in t:  # Finnhub free tier: US symbols only
-                continue
+        for w in range(3):   # 21 days, a week per call
+            a, b = start + timedelta(days=7 * w), start + timedelta(days=7 * w + 6)
             try:
-                r = requests.get("https://finnhub.io/api/v1/calendar/earnings",
-                                 params={"from": start.isoformat(), "to": end.isoformat(),
-                                         "symbol": t, "token": key}, timeout=15)
+                r = get("https://finnhub.io/api/v1/calendar/earnings",
+                        params={"from": a.isoformat(), "to": b.isoformat(), "token": key}, timeout=30)
                 items = r.json().get("earningsCalendar", []) if r.ok else []
-                dates = sorted(i["date"] for i in items if i.get("date"))
-                if dates:
-                    out[t] = dates[0]
             except Exception as e:
-                log.warning("earnings lookup %s: %s", t, describe_error(e))
-            time.sleep(1.1)  # stay under 60 calls/min
+                log.warning("earnings calendar %s..%s: %s", a, b, describe_error(e))
+                continue
+            for i in items:
+                t = spell.get(str(i.get("symbol", "")).upper()) or (i.get("symbol") if i.get("symbol") in want else None)
+                d = i.get("date")
+                if t and d and (t not in out or d < out[t]):
+                    out[t] = d
+        log.info("earnings dates for %d of %d name(s) in the next 21 days", len(out), len(want))
     state["earnings"] = {"date": today, "map": out}
     return {t: date.fromisoformat(d) for t, d in out.items()}
 

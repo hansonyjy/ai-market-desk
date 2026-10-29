@@ -462,3 +462,24 @@ for _t, _h in [("TSLA", "Barclays upgrades Tesla, says SpaceX merger now a key p
                ("TSLA", "Intel Shares Rise Nearly 4% Following Cisco Upgrade and Tesla Foundry Agreement")]:
     assert s.vip_reject(_c, _t, _h, "https://finance.yahoo.com/x") == "", _h
 print("vip gate keeps last week's good items")
+
+# ---- earnings: one calendar call per week covers every name (500 calls would take 9+ minutes)
+import os
+calls = []
+class _R:
+    ok = True
+    def __init__(self, items): self._i = items
+    def json(self): return {"earningsCalendar": self._i}
+def _get(url, params=None, **kw):
+    calls.append(params)
+    assert "symbol" not in params
+    return _R([{"symbol": "BRK.B", "date": params["from"]}, {"symbol": "AAPL", "date": params["to"]},
+               {"symbol": "NOTOURS", "date": params["from"]}])
+os.environ["FINNHUB_KEY"] = "k"
+st = {}
+got = s.earnings_dates(["AAPL", "BRK-B", "CSU.TO"], st, get=_get)
+os.environ.pop("FINNHUB_KEY")
+assert len(calls) == 3 and set(got) == {"AAPL", "BRK-B"}                       # Yahoo spelling back, others ignored
+assert got["BRK-B"] == min(date.fromisoformat(c["from"]) for c in calls)      # the earliest date wins
+assert s.earnings_dates(["AAPL"], st, get=lambda *a, **k: 1 / 0) == got and len(calls) == 3   # cached for the day
+print("earnings calendar ok")
