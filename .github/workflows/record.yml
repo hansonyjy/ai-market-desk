@@ -1,0 +1,52 @@
+# Records a live session for `desk demo`, using the repository owner's own keys.
+# Manual only: nothing here runs on a schedule, and forks never receive these secrets.
+# Start it a few minutes before 10:00 New York time; it waits for each session.
+name: Record demo
+on:
+  workflow_dispatch:
+    inputs:
+      sessions:
+        description: "Sessions to record, in order"
+        default: "open midday ask rulelab"
+permissions:
+  contents: write
+concurrency:
+  group: record
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 330
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
+      DESK_EMAIL_SINK: out/record/mail
+      DAILY_AI_CALLS: "60"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+      - name: Record
+        run: |
+          wait_until () {  # $1 = HH:MM New York time
+            now=$(TZ=America/New_York date +%s)
+            then=$(TZ=America/New_York date -d "today $1" +%s)
+            [ "$then" -gt "$now" ] && { echo "waiting until $1 New York"; sleep $((then - now)); } || true
+          }
+          for s in ${{ inputs.sessions }}; do
+            case $s in
+              open) wait_until 10:05 ;;
+              midday) wait_until 12:30 ;;
+            esac
+            desk record "$s"
+          done
+      - name: Commit the recording to the demo-data branch
+        run: |
+          git config user.name "desk-recorder"
+          git config user.email "desk-recorder@users.noreply.github.com"
+          git checkout -B demo-data
+          git add -f demo/fixtures
+          git commit -m "Demo recording $(TZ=America/New_York date +%F)" || echo "nothing new"
+          git push -f origin demo-data
