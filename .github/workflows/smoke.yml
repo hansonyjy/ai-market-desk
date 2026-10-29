@@ -1,0 +1,23 @@
+# A live-data dry run on the full universe: real prices and earnings dates, no
+# model calls (no Anthropic key here), nothing written or sent. Manual only.
+name: Smoke test
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
+      DESK_EMAIL_SINK: out/smoke/mail
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+      - name: Scan the universe (dry run)
+        run: time desk scan --dry-run --force
