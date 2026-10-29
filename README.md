@@ -18,7 +18,7 @@ I designed and built it end to end, as a product and as a system: what an invest
 
 ## What lands in your inbox
 
-- **The opening digest, at 10:00.** The open's gaps and breakouts, each with its catalyst, grouped by theme, under one line on the market backdrop.
+- **The opening digest, at 07:00 PT.** The open's gaps and breakouts, each with its catalyst, grouped by theme, under one line on the market backdrop.
 - **Live alerts.** A name breaks out, gaps or moves fast on volume, and the news explains why. Capped per day, so it never floods you.
 - **Your levels.** A holding reaches your trim level, or a watchlist name reaches your entry: always emailed, with the news that moved it there, or *No news found*.
 - **VIP breaking news.** For the few names you follow most closely: material headlines every 15 minutes, with opinion pieces and recycled stories filtered out.
