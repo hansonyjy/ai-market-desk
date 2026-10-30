@@ -30,19 +30,20 @@ def fake_dl(tickers, *a, **kw):
         return pd.concat({t: pd.DataFrame({"Close": np.linspace(100, 101, len(mi)), "Volume": 1e4}, index=mi) for t in ts}, axis=1)
     return pd.concat({t: DATA.get(t, bars(t)) for t in ts}, axis=1)
 class R:   # like requests: .url is the final URL, query string and token included
-    def __init__(s, obj, url=""): s.status_code, s.ok, s.url, s.text = 200, True, url, json.dumps(obj)
+    def __init__(s, obj, url="", status=200, headers=None):
+        s.status_code, s.ok, s.url, s.text, s.headers = status, status < 400, url, json.dumps(obj), headers or {}
     def json(s): return json.loads(s.text)
 def fake_get(url, params=None, **kw):
-    return _fake_get(url, params, **kw).__class__(json.loads(_fake_get(url, params, **kw).text),
-                                                   url + "?" + "&".join(f"{k}={v}" for k, v in (params or {}).items()))
-def _fake_get(url, params=None, **kw):
+    full = url + ("?" + "&".join(f"{k}={v}" for k, v in params.items()) if params else "")
+    if "finnhub.io/api/news" in url:   # a news link: redirects to the article
+        return R({}, full, 302, {"Location": f"https://www.reuters.com/markets/{url.split('id=')[1]}-rallies"})
     if "company-news" in url:
         t = (params or {}).get("symbol", "")
         return R([{"id": hash(t) % 10**6, "headline": f"{t} rallies as chip demand jumps", "summary": "results beat",
-                   "url": f"https://news.example.com/{t.lower()}-rallies", "source": "Reuters", "datetime": int(CLOCK.timestamp()) - 3600}])
+                   "url": f"https://finnhub.io/api/news?id={t.lower()}", "source": "Reuters", "datetime": int(CLOCK.timestamp()) - 3600}], full)
     if "calendar/earnings" in url:
-        return R({"earningsCalendar": []})
-    return R({})
+        return R({"earningsCalendar": []}, full)
+    return R({}, full)
 class FakeAI:
     @property
     def messages(s): return s
@@ -50,7 +51,7 @@ class FakeAI:
         sysp, u = str(kw.get("system", "")), kw["messages"][0]["content"]
         if "Tape Reader" in sysp[:4000] and " | " in u:
             tks = sorted({l.split(" | ")[0].strip() for l in u.splitlines() if " | " in l and l.split(" | ")[0].strip() in U})
-            text = "\n".join(f"{t} | Chip demand news lifted shares | ACCUMULATION | high | https://news.example.com/{t.lower()}-rallies" for t in tks)
+            text = "\n".join(f"{t} | Chip demand news lifted shares | ACCUMULATION | high | https://finnhub.io/api/news?id={t.lower()}" for t in tks)
         else:
             text = "[]"
         return NS(stop_reason="end_turn", usage=NS(input_tokens=100, output_tokens=20, server_tool_use=None),
@@ -78,4 +79,8 @@ replay.demo([])
 out = sorted(p.name for p in (replay.ROOT / "out/demo/mail").glob("*.txt"))
 same = all((pathlib.Path(sink)/a).read_text() == (replay.ROOT/"out/demo/mail"/b).read_text() for a, b in zip(recorded, out))
 assert recorded == out and same, (recorded, out)
+# Oct 30: news links resolve to the article in the replay too, each to its own
+mail = "".join((replay.ROOT / "out/demo/mail" / n).read_text() for n in out)
+assert "reuters.com/markets/nvda-rallies" in mail and "reuters.com/markets/amd-rallies" in mail, mail[:2000]
+assert "finnhub.io/api/news" not in mail
 print("demo replays the recording exactly:", len(out), "email(s)")

@@ -74,8 +74,11 @@ def _redact(text: str) -> str:
 
 
 def _http_key(url, params) -> str:
+    """The full URL counts, query included: finnhub.io/api/news?id=A and ?id=B are
+    different requests (Oct 30: keyed without the query, every news link shared
+    one entry). Secrets never count."""
     p = {k: v for k, v in (params or {}).items() if k.lower() not in SECRET_PARAMS}
-    return _h({"u": url.split("?")[0], "p": p})
+    return _h({"u": _scrub_url(url), "p": p})
 
 
 def _ai_key(kw) -> str:
@@ -200,6 +203,7 @@ class _ReplayClient:
 class _Resp:
     def __init__(self, d):
         self.status_code, self.ok, self.text, self.url = d["status"], 200 <= d["status"] < 400, d["text"], d.get("url", "")
+        self.headers = {"Location": d["location"]} if d.get("location") else {}   # a redirect's target
 
     def json(self):
         return json.loads(self.text)
@@ -233,13 +237,14 @@ def _install(store: _Store, clock: _datetime | None):
         if rec:
             r = real_get(url, params=params, **kw)
             store.index["http"][k] = {"url": url.split("?")[0], "status": r.status_code,
-                                      "text": r.text[:400_000], "final": _scrub_url(getattr(r, "url", "") or "")}
+                                      "text": r.text[:400_000], "final": _scrub_url(getattr(r, "url", "") or ""),
+                                      "location": _scrub_url((getattr(r, "headers", None) or {}).get("Location", "") or "")}
             return r
         d = store.index["http"].get(k)
         if d is None:
             store.misses.append(f"http:{url.split('?')[0]}")
             return _Resp({"status": 404, "text": "[]"})
-        return _Resp({"status": d["status"], "text": d["text"], "url": d.get("final", "")})
+        return _Resp({"status": d["status"], "text": d["text"], "url": d.get("final", ""), "location": d.get("location", "")})
 
     def client():
         return _RecordingClient(real_client(), store) if rec else _ReplayClient(store)
