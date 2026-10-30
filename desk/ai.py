@@ -684,6 +684,31 @@ def strategist_market(backdrop: str, said: list[dict], *, client=None, take_budg
 ASK_LABELS = ("Chartist, Newton-style (simulated):", "Strategist, Lee-style (simulated):", "Tape Reader:")
 
 
+def mislabelled_levels(text: str, facts: str) -> list[str]:
+    """Levels an answer puts on the wrong side of the price: called support but above
+    the last price, or resistance but below it (Oct 30: "next support ... 207.25"
+    with NVDA at 202.82). Read clause by clause; a clause naming both is skipped."""
+    m = re.search(r"\blast (\d+(?:\.\d+)?)", facts)
+    if not m:
+        return []
+    last = float(m.group(1))
+    known = {float(x) for line in facts.splitlines() if "levels" in line
+             for x in re.findall(r"\d+\.\d+", line)}
+    bad = []
+    for clause in re.split(r"(?<=[.;!?])\s+|;\s*|,\s+|\.\.\.\s*|\s+but\s+", text):
+        c = clause.lower()
+        sup, res = "support" in c, "resistance" in c
+        if sup == res:
+            continue
+        for x in re.findall(r"\$?(\d+\.\d+)", clause):
+            v = float(x)
+            if v not in known:
+                continue
+            if (sup and v > last * (1 + SIDE_TOL)) or (res and v < last * (1 - SIDE_TOL)):
+                bad.append(f"{x} called {'support' if sup else 'resistance'} with the price at {m.group(1)}")
+    return bad
+
+
 def answer_question(question: str, quoted: str, facts: str, *, client=None, take_budget=None) -> tuple[str, list[str]]:
     """One answer to a team member's reply, as the specialist who owns it.
     Returns (answer, source links). A price not in the facts drops the answer."""
@@ -691,8 +716,20 @@ def answer_question(question: str, quoted: str, facts: str, *, client=None, take
         return "", []
     user = (f"Question from the team:\n{question}\n\nThe desk email they replied to:\n{quoted or '(not quoted)'}"
             f"\n\nFacts computed today:\n{facts or '(none: no name identified)'}\n\nAnswer now.")
-    text, cited = ask("09-ask-desk.md", user, max_tokens=1200, searches=2, client=client or _client())
+    client = client or _client()
+    text, cited = ask("09-ask-desk.md", user, max_tokens=1200, searches=2, client=client)
     text = text.strip()
+    wrong = mislabelled_levels(text, facts)
+    if wrong and (not take_budget or take_budget()):
+        log.warning("Ask the desk: level on the wrong side (%s); asking once more", "; ".join(wrong))
+        fix = (f"{user}\n\nYour last answer was rejected: {'; '.join(wrong)}. A level above the last "
+               "price is resistance, a level below it is support. Answer again using the two lists as given.")
+        text, cited = ask("09-ask-desk.md", fix, max_tokens=1200, searches=2, client=client)
+        text = text.strip()
+        wrong = mislabelled_levels(text, facts)
+    if wrong:
+        log.warning("Ask the desk: answer dropped, levels on the wrong side: %s", "; ".join(wrong))
+        return "", []
     allowed = set(re.findall(r"\d+\.\d{2}", facts + " " + quoted))
     stray = [p for p in re.findall(r"\$?(\d+\.\d{2})\b", text) if p not in allowed]
     if stray:

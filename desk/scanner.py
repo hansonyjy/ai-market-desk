@@ -1723,9 +1723,16 @@ def ask_facts(t: str, state: dict, today: date, client=None, fetch_fn=None) -> s
         lv = levels.compute_levels(bars[t]) if t in bars else {}
         if lv:
             add_technicals({t: lv}, bars, fetch_fn)
-            lvl = "; ".join(f"{k} {v}" for k, v in lv["levels"].items())
-            lines.append(f"{t}: last {lv['last']} | daily trend {lv['trend_daily']} | weekly trend "
-                         f"{lv['trend_weekly']} | ATR14 {lv.get('atr14')}\n  levels: {lvl}")
+            # Split by side of the price, nearest first, so a level above the price is
+            # never offered as support (Oct 30: Ask called 207.25 "support" at 202.82).
+            last = lv["last"]
+            below = sorted(((k, v) for k, v in lv["levels"].items() if v <= last), key=lambda kv: -kv[1])
+            above = sorted(((k, v) for k, v in lv["levels"].items() if v > last), key=lambda kv: kv[1])
+            side = lambda kv: "; ".join(f"{k} {v}" for k, v in kv) or "none"
+            lines.append(f"{t}: last {last} | daily trend {lv['trend_daily']} | weekly trend "
+                         f"{lv['trend_weekly']} | ATR14 {lv.get('atr14')}\n"
+                         f"  levels below the price (support side): {side(below)}\n"
+                         f"  levels above the price (resistance side): {side(above)}")
             tech = ai.tech_line(lv.get("tech") or {})
             if tech:
                 lines.append(f"  momentum and leadership: {tech}")

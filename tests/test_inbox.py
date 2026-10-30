@@ -112,9 +112,9 @@ s.LOCAL_LOG = s.Path(tmp) / "log.csv"
 today = datetime.now(s.ET).date().isoformat()
 s.save_state({"macro": {"date": today, "m": {}}, "said": {"date": today, "items": []}})
 lv = __import__("desk.levels", fromlist=["x"]).compute_levels(hack)
-low20 = lv["levels"]["20-day low"]
+low20, pc = lv["levels"]["20-day low"], lv["levels"]["prior close"]   # 99.08 below the price, 100.08 above
 fc = FakeClient([reply(f"Chartist, Newton-style (simulated): Downtrend on both timeframes. The 20-day low at {low20} "
-                       f"is now resistance; there is no nearby support on our list.")])
+                       f"is the nearest support; the prior close at {pc} is resistance.")])
 sent = []
 mailer_send = mailer.send
 mailer.send = lambda *a, **k: sent.append((a, k)) or True
@@ -127,7 +127,8 @@ assert len(out) == 1 and out[0]["ticker"] == "HACK" and out[0]["sent"]          
 assert subject.startswith("Re: HACK down 5.0%") and kw["to"] == "m@x.com" and kw["in_reply_to"]
 assert body.startswith("Chartist, Newton-style (simulated):") and mailer.FOOTER in body
 prompt = fc.calls[0]["messages"][0]["content"]
-assert "Where is support" in prompt and "levels: " in prompt and "20-day low" in prompt
+assert "Where is support" in prompt and "support side): " in prompt and "resistance side): " in prompt
+assert prompt.index("20-day low") < prompt.index("resistance side")          # 99.08 is listed on the support side
 assert FakeIMAP.stored == [b"1"]                              # only the answered one is marked read
 assert FakeIMAP.searched[1] == "SINCE"                         # read or unread: opened mail is still answered
 # A second run answers nothing new: the question is remembered by Message-ID
@@ -168,6 +169,22 @@ finally:
 fc = FakeClient([reply("Chartist, Newton-style (simulated): support is at 91.25.")])
 ans, _ = ai.answer_question("Support?", "", "HACK: last 100.0 | levels: 20-day low 98.86", client=fc)
 assert ans == ""
+
+# 5b) Oct 30: a level on the wrong side of the price gets one retry, then the answer is dropped
+F = "NVDA: last 202.82 | x\n  levels below the price (support side): 52-week low 164.27\n  levels above the price (resistance side): 200-day average 204.28; 60-day low 207.25"
+wrong = reply("Chartist, Newton-style (simulated): Next support is the 60-day low at 207.25.")
+right = reply("Chartist, Newton-style (simulated): The 200-day average at 204.28 is resistance; support is the 52-week low at 164.27.")
+assert ai.mislabelled_levels(wrong.content[0].text, F) and not ai.mislabelled_levels(right.content[0].text, F)
+fc = FakeClient([wrong, right])
+ans, _ = ai.answer_question("Support?", "", F, client=fc)
+assert ans.startswith("Chartist") and "164.27" in ans and len(fc.calls) == 2
+assert "rejected: 207.25 called support" in fc.calls[1]["messages"][0]["content"]
+fc = FakeClient([wrong, wrong])
+ans, _ = ai.answer_question("Support?", "", F, client=fc)
+assert ans == "" and len(fc.calls) == 2                                       # twice wrong: dropped
+assert not ai.mislabelled_levels("It sits on support at 202.50 and resistance at 204.28.", F)   # both words: not judged
+assert not ai.mislabelled_levels("Support at 204.28, right at the price.", F.replace("202.82", "204.00"))   # within 0.25%
+assert ai.mislabelled_levels("Support at 204.28.", F.replace("202.82", "203.00"))                          # 0.6% above: wrong
 
 # 6) A reply goes out in the same thread
 class FakeSMTP:
