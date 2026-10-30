@@ -49,7 +49,8 @@ def ask_terminal(text: str) -> str:
     print(f"\nQ: {text}\n\n{body}")
     if os.getenv("DESK_EMAIL_SINK"):
         q = text.split(":", 1)[1].strip() if t and text.upper().startswith(t.upper() + ":") else text
-        mailer.send(f"Re: {t or 'Question'}: {q[:60]}", body, to="(terminal)")   # not "NVDA: NVDA: ..."
+        short = q if len(q) <= 70 else q[:70].rsplit(" ", 1)[0] + "…"   # whole words only
+        mailer.send(f"Re: {t or 'Question'}: {short}", body, to="(terminal)")   # not "NVDA: NVDA: ..."
     scanner.log_cost(state, today, False)
     sheet.save_state(state)
     return answer

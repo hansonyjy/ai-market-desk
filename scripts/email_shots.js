@@ -26,7 +26,10 @@ const NAMES = [[/opening-digest/, "email-digest"], [/^\d+-vip-/, "email-vip"], [
     const txtTwin = path.join(src, f.replace(/\.html$/, ".txt"));   // the HTML part has no headers
     const head = fs.existsSync(txtTwin) ? fs.readFileSync(txtTwin, "utf8") : raw;
     const subject = (head.match(/^Subject: (.*)$/m) || [, ""])[1] || f;
-    const body = f.endsWith(".html") ? raw.replace(/^[\s\S]*?(<div)/, "$1")
+    // A multi-alert email shows its first alert only (the rest follow the same shape).
+    const html = raw.replace(/^[\s\S]*?(<div)/, "$1");
+    const first = html.indexOf("<hr");
+    const body = f.endsWith(".html") ? (first > 0 ? html.slice(0, first) + "</div>" : html)
       : `<pre style="white-space:pre-wrap;font:14px/1.5 Arial,Helvetica,sans-serif;margin:0">${raw.replace(/^Subject:.*\n(To:.*\n)?\n?/, "")
           .replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]))}</pre>`;
     await page.setContent(`<!doctype html><meta charset="utf-8"><body style="margin:0;background:#eef1f6;padding:24px">

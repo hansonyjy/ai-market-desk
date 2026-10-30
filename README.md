@@ -83,7 +83,9 @@ desk demo
 
 ## What the emails look like
 
-<!-- GALLERY: opening digest, VIP email, Ask the desk reply (docs/img/*.png) -->
+One alert from the recorded session (Oct 30, 2026), as it arrives. The lenses disagree, and the fixed rules turn a take-private rumour on 10x volume into *watch, do not chase*:
+
+<p align="center"><img src="docs/img/email-alert.png" alt="A real alert email: Global Payments up 11.1% on 10.1x volume after a report of a take-private deal; the Chartist votes Trim, the Strategist votes Watch, and the Call is Watch, do not chase, with the source linked" width="80%"></p>
 
 ## Product decisions
 
