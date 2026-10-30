@@ -4,7 +4,7 @@
   <a href="../../actions/workflows/ci.yml"><img src="../../actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/python-3.11%2B-3776AB" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/agents-6%20live-4f46e5" alt="6 live agents">
-  <img src="https://img.shields.io/badge/tests-500%20checks-14b8a6" alt="500 test checks">
+  <img src="https://img.shields.io/badge/tests-500%2B%20checks-14b8a6" alt="500+ test checks">
   <img src="https://img.shields.io/badge/runs%20for-~%241%2Fday-5eead4" alt="about $1 a day">
 </p>
 
@@ -107,7 +107,9 @@ Every catalyst needs a link dated today or the last session. Quote pages, homepa
 The Chartist and the Strategist argue. The Call comes from fixed rules, so the same facts always give the same call. It never trims on price alone.
 
 **4. Every rule earns its place.**
-The **Rule Lab** replays each price rule over five years against condition-matched random days, clusters errors by month, holds out the latest years, and runs a placebo on random dates. <!-- RULELAB: chart + one-line result on the S&P 500 --> The finding shaped the product: price rules time nothing on their own, so the value has to come from the news read, and the Scorecard measures exactly that.
+The **Rule Lab** replays each price rule over five years against condition-matched random days, clusters errors by month, keeps the latest years sealed until the end, and runs the same test on random dates as a placebo. On the S&P 500, 2 of 461 rule-and-condition groups passed, against 0 on random dates. Price rules alone time almost nothing, so the value has to come from the news read, and the Scorecard measures exactly that.
+
+<p align="center"><img src="docs/img/rulelab.svg" alt="Rule Lab on the S&amp;P 500: 461 rule groups tested, 2 passed in both the fit and the sealed years, 0 on random dates. Each dot is a rule group, plotted by its edge in the fit years against its edge in the sealed years; nearly all sit around zero." width="100%"></p>
 
 **5. Every bug becomes a check.**
 `audit.py` runs after the close and emails one line: *all clear* or *N fail, M warn*. Each check is a problem the desk actually had: a repeated VIP story, an alert with no source, a cap exhausted before noon, a security renamed in the Universe.
@@ -141,7 +143,7 @@ desk/            the package: scanner, agents (ai.py), levels, macro, mailer, in
 charters/        one prompt file per agent
 desk/config/     universe (S&P 500), sector benchmarks, VIP keywords, source rules
 scripts/         rebuild the universe when the index changes
-tests/           500 offline checks, including an end-to-end record/replay test
+tests/           500+ offline checks, including an end-to-end record/replay test
 demo/fixtures/   the recorded session that `desk demo` replays
 ```
 
