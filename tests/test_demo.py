@@ -9,7 +9,7 @@ import time; time.sleep = lambda s: None   # Finnhub rate-limit pauses
 import numpy as np, pandas as pd, requests, yfinance as yf
 
 home = tempfile.mkdtemp(); sink = tempfile.mkdtemp()
-os.environ.update(DESK_HOME=home, DESK_EMAIL_SINK=sink, ANTHROPIC_API_KEY="fake", FINNHUB_KEY="fake")
+os.environ.update(DESK_HOME=home, DESK_EMAIL_SINK=sink, ANTHROPIC_API_KEY="fake-anthropic-key-for-tests", FINNHUB_KEY="fake-finnhub-key-for-tests")
 CLOCK = datetime(2026, 10, 28, 14, 5, tzinfo=timezone.utc)   # 10:05 New York, a Wednesday
 import csv
 U = [r["Ticker"] for r in csv.DictReader(open(ROOT / "desk/config/universe.csv"))]
@@ -29,10 +29,13 @@ def fake_dl(tickers, *a, **kw):
         mi = pd.date_range("2026-10-28 09:30", "2026-10-28 10:05", freq="min", tz="America/New_York")
         return pd.concat({t: pd.DataFrame({"Close": np.linspace(100, 101, len(mi)), "Volume": 1e4}, index=mi) for t in ts}, axis=1)
     return pd.concat({t: DATA.get(t, bars(t)) for t in ts}, axis=1)
-class R:
-    def __init__(s, obj): s.status_code, s.ok, s.url, s.text = 200, True, "", json.dumps(obj)
+class R:   # like requests: .url is the final URL, query string and token included
+    def __init__(s, obj, url=""): s.status_code, s.ok, s.url, s.text = 200, True, url, json.dumps(obj)
     def json(s): return json.loads(s.text)
 def fake_get(url, params=None, **kw):
+    return _fake_get(url, params, **kw).__class__(json.loads(_fake_get(url, params, **kw).text),
+                                                   url + "?" + "&".join(f"{k}={v}" for k, v in (params or {}).items()))
+def _fake_get(url, params=None, **kw):
     if "company-news" in url:
         t = (params or {}).get("symbol", "")
         return R([{"id": hash(t) % 10**6, "headline": f"{t} rallies as chip demand jumps", "summary": "results beat",
@@ -57,6 +60,13 @@ from desk import ai, replay
 ai._client = lambda: FakeAI()
 replay.FIXTURES = pathlib.Path(tempfile.mkdtemp())
 replay.record(["open"], clock=CLOCK)
+# Oct 30: a response's final URL carried the Finnhub token into the recording.
+key = os.environ["FINNHUB_KEY"]
+for f in replay.FIXTURES.rglob("*"):
+    if f.is_file():
+        raw = f.read_bytes()
+        text = (__import__("gzip").decompress(raw) if f.suffix == ".gz" else raw).decode(errors="ignore")
+        assert key not in text and "token=" not in text, f"secret saved in {f.name}"
 recorded = sorted(p.name for p in pathlib.Path(sink).glob("*.txt"))
 assert recorded, "the recording should produce emails"
 # replay with everything real-network blocked

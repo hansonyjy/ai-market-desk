@@ -42,6 +42,16 @@ jobs:
             esac
             desk record "$s"
           done
+      - name: Refuse to push a recording that contains a secret
+        run: |
+          for v in "$ANTHROPIC_API_KEY" "$FINNHUB_KEY"; do
+            if [ -n "$v" ] && grep -rqF -- "$v" demo/fixtures; then
+              echo "::error::a key is in the recording; not pushing"; exit 1
+            fi
+          done
+          if grep -rq "token=" demo/fixtures --include=*.json; then
+            echo "::error::token= is in the recording; not pushing"; exit 1
+          fi
       - name: Commit the recording to the demo-data branch
         run: |
           git config user.name "desk-recorder"

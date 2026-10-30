@@ -50,6 +50,29 @@ def _yf_key(tickers, kw) -> str:
     return _h({"t": t, **{k: kw.get(k) for k in ("period", "interval", "auto_adjust", "actions")}})
 
 
+def _scrub_url(url: str) -> str:
+    """A URL as it may be saved: secret query parameters removed (Oct 30: a response's
+    final URL still carried the Finnhub ?token=, and the recording saved it)."""
+    from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+    if not url or "?" not in url:
+        return url or ""
+    parts = urlsplit(url)
+    q = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k.lower() not in SECRET_PARAMS]
+    return urlunsplit(parts._replace(query=urlencode(q)))
+
+
+SECRET_ENV = ("ANTHROPIC_API_KEY", "FINNHUB_KEY", "GMAIL_APP_PASSWORD", "GOOGLE_CREDS_JSON")
+
+
+def _redact(text: str) -> str:
+    """Last line of defence: any live secret value that reached the recording is replaced."""
+    for name in SECRET_ENV:
+        v = os.getenv(name) or ""
+        if len(v) >= 8 and v in text:
+            text = text.replace(v, "[redacted]")
+    return text
+
+
 def _http_key(url, params) -> str:
     p = {k: v for k, v in (params or {}).items() if k.lower() not in SECRET_PARAMS}
     return _h({"u": url.split("?")[0], "p": p})
@@ -103,7 +126,7 @@ class _Store:
         self.misses: list[str] = []
 
     def save(self):
-        (self.dir / "index.json").write_text(json.dumps(self.index, indent=1, default=str))
+        (self.dir / "index.json").write_text(_redact(json.dumps(self.index, indent=1, default=str)))
 
 
 def _serialize_response(resp) -> dict:
@@ -210,7 +233,7 @@ def _install(store: _Store, clock: _datetime | None):
         if rec:
             r = real_get(url, params=params, **kw)
             store.index["http"][k] = {"url": url.split("?")[0], "status": r.status_code,
-                                      "text": r.text[:400_000], "final": getattr(r, "url", "")}
+                                      "text": r.text[:400_000], "final": _scrub_url(getattr(r, "url", "") or "")}
             return r
         d = store.index["http"].get(k)
         if d is None:
